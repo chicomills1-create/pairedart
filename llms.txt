@@ -1,0 +1,54 @@
+# PAIRED
+
+> PAIRED is an online marketplace where independent artists sell original, human-made art and take commissions directly from collectors. No AI-generated work is sold here. Front door: https://pairedart.com/
+
+PAIRED is built for the next generation of artists, and for collectors who would rather buy from a person than a warehouse. You browse by category, message the artist who made the piece, and agree the work in that same conversation — the artist's name comes before the price.
+
+## What PAIRED is
+
+- Founded by Jeremy Mills (Founder & CEO). Built and operated with Muse, AI operations partner.
+- The house rule: real art, by real artists, signed by the hand that made it.
+- Human-made only: no AI-generated work is sold here.
+- Open to teenagers and adults: you must be 13 or older to join. PAIRED does not create accounts for children under 13.
+- Current state, stated on the site itself: the front door is a working prototype — demo purchases and memberships are not live.
+
+## House rules on money
+
+- Every keep figure is labeled "after platform fee"; processing is shown at checkout.
+- The No-Trap Promise: join in a tap, cancel in two taps — from your account, any time. No emails, no phone calls, no guilt trips.
+
+## Membership tiers (artists)
+
+- Solo — Free: 5 live listings, buyer messaging. Platform fee 8% per sale — you keep $184 on a $200 sale after platform fee.
+- Paired — $9.99/month: unlimited listings, commissions + analytics. Platform fee 5% per sale — you keep $190 on a $200 sale after platform fee.
+- Ensemble — $19.99/month: unlimited listings, commissions + analytics, featured placement, verified badge, live drop events. Platform fee 3% per sale — you keep $194 on a $200 sale after platform fee.
+
+## For collectors
+
+- The Inner Circle — $7.99/month: early drops, first commission slots, and the collection vault.
+
+## Founding 100
+
+- The first 100 artists to build this house lock Paired at $6/month for 24 months (standard Paired is $9.99/month), get 60 free days to onboard, save $95.76 across the lock, and carry the Founding Paired badge forever.
+
+## Key surfaces
+
+PAIRED is a single-page app: the links below are app routes that open inside https://pairedart.com/.
+
+- Explore: https://pairedart.com/#/explore — browse original art by category.
+- Commission Board: https://pairedart.com/#/board — buyers post commission briefs; artists pitch in the thread.
+- Artists: https://pairedart.com/#/artists — the artist directory.
+- Top Sellers: https://pairedart.com/#/top
+- Artist Spotlight: https://pairedart.com/#/spotlight — one artist on the stage each week.
+- Sell: https://pairedart.com/#/sell — open a studio and list a piece.
+- Sell Art Online: https://pairedart.com/#/sell-art-online — for artists: how selling works here, the tiers, and what you keep.
+- Etsy Alternative: https://pairedart.com/#/etsy-alternative — a $200 sale run through both fee stacks; Etsy’s published components on one side, PAIRED’s one fee on the other.
+- Drops: https://pairedart.com/#/drops — themed drop events on a published rhythm: a new wall every other Friday at 6:00 PM, running through Sunday night.
+- Commissions: https://pairedart.com/#/commissions — how commissions run here: brief, pitch, structured proposal, stage rail, delivery.
+- Membership: https://pairedart.com/#/membership — the tiers above, with the full comparison table.
+- Founding 100: https://pairedart.com/#/founding100
+- Founders: https://pairedart.com/#/founders — Jeremy Mills (Founder & CEO) and Muse (AI Operations Partner).
+
+## Contact
+
+- Conversations happen on PAIRED itself: message the artist who made the piece, and agree the work in that same conversation.
