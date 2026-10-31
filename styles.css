@@ -1023,3 +1023,68 @@ html,body{overflow-x:clip}
 @media(min-width:1600px) and (max-width:1849px){
  .navlinks{font-size:11px;gap:12px}
 }
+
+/* ═══ V58 — THE STUDIO ═══
+   Both faces of one identity: seller dashboard + buyer collection, the
+   posting journey, placements as chips, the simulated earnings ledger.
+   Canvas law (v57) holds: fluid grids, minmax(0,1fr), nothing fixed wider
+   than the phone. */
+.face-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 22px}
+.face-tab{padding:12px 18px;border-radius:100px;border:1px solid #5b4c6c;background:#181328;color:#fff;font-weight:900;font-size:12px;letter-spacing:.6px}
+.face-tab.active{background:linear-gradient(95deg,#fa258e,#ffb82f,#00d9fa);color:#0d0915;border-color:transparent}
+.preview-badge{background:#ffbd24;color:#241203;padding:3px 9px;border-radius:50px;font-size:10px;letter-spacing:1px}
+.first-number{border:2px solid var(--gold);background:linear-gradient(130deg,#241a08,#1a1630)}
+.first-num{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-top:6px}
+.first-num b{font-family:'Fraunces',serif;font-size:64px;line-height:1}
+.first-num span{font-weight:900;letter-spacing:1.5px;font-size:13px}
+.honesty-line{margin-top:14px;font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.3px}
+.row-actions{display:inline-flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.track-line{color:var(--muted);font-size:12px;margin-top:5px;line-height:1.7}
+.place-chips{display:inline-flex;gap:6px;flex-wrap:wrap;vertical-align:middle}
+.place-chip{padding:5px 10px;border-radius:50px;border:1px solid #5b4c6c;background:#241d35;color:#beb5d0;font-size:10px;font-weight:900;letter-spacing:.6px}
+button.place-chip{cursor:pointer}
+.place-chip.on{background:#1d5c38;color:#b8ffd2;border-color:#2f8f57}
+.sim-zone{border:2px dashed #876399}
+.earn-row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px dashed #43364f;font-size:14px}
+.earn-row:last-child{border-bottom:0}
+.earn-row.total{font-size:17px;font-weight:900;color:#fff}
+.earn-lines{margin-top:14px;border-top:1px solid #43364f;padding-top:6px}
+.prog-list{display:grid;gap:12px;margin-top:10px}
+.prog-row{display:flex;gap:12px;align-items:flex-start}
+.prog-row .prog-mark{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid #5b4c6c;display:grid;place-items:center;font-size:13px;color:#beb5d0}
+.prog-row.done .prog-mark{background:#1d5c38;color:#b8ffd2;border-color:#2f8f57}
+.prog-row b{color:#fff;font-size:14px}
+.prog-row p{color:var(--muted);font-size:12.5px;line-height:1.55;margin-top:2px}
+.steps-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+.step-dot{padding:8px 13px;border-radius:50px;border:1px solid #5b4c6c;background:#181328;color:#beb5d0;font-size:11px;font-weight:900;letter-spacing:.5px}
+.step-dot.now{background:linear-gradient(95deg,#fa258e,#ffb82f,#00d9fa);color:#0d0915;border-color:transparent}
+.step-dot.done{background:#1d5c38;color:#b8ffd2;border-color:#2f8f57}
+.step-arrow{color:var(--muted)}
+.dest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.dest-card{display:block;padding:18px;border:1px solid #5b4c6c;border-radius:15px;background:#201a32;cursor:pointer}
+.dest-card b{display:block;font-family:'Syne',serif;letter-spacing:1px;margin:8px 0 6px;color:#fff}
+.dest-card span{color:var(--muted);font-size:12.5px;line-height:1.6;display:block}
+.dest-card input{width:20px;height:20px;accent-color:#fa258e}
+.phone-frame{max-width:390px;margin:0 auto;border:1px solid #5b4c6c;border-radius:28px;padding:16px;background:#0c0a18;overflow:hidden}
+.draft-photo{margin-top:10px;border-radius:12px;overflow:hidden;border:1px solid #5b4c6c}
+.draft-photo img{width:100%;display:block}
+body.light .face-tab,body.light .step-dot{background:#FFFDF7;color:#241f31;border-color:#e2d9c6}
+body.light .face-tab.active,body.light .step-dot.now{background:linear-gradient(95deg,#fa258e,#ffb82f,#00d9fa);color:#0d0915}
+body.light .first-number{background:linear-gradient(130deg,#fdf3d8,#FFFDF7)}
+body.light .first-num span,body.light .prog-row b{color:#241f31}
+body.light .earn-row{border-bottom-color:#e2d9c6}
+body.light .earn-row.total{color:#241f31}
+body.light .dest-card{background:#FFFDF7;border-color:#e2d9c6}
+body.light .dest-card b{color:#241f31}
+body.light .phone-frame{background:#FFFDF7;border-color:#e2d9c6}
+body.light .place-chip{background:#f3eddc;color:#5d5570}
+body.light .place-chip.on{background:#1d5c38;color:#b8ffd2}
+@media(max-width:720px){.dest-grid{grid-template-columns:1fr}.first-num b{font-size:52px}.earn-row{font-size:13px}.row-actions{justify-content:flex-start}}
+/* Studio rows at phone width: thumb + info share line one, the badge keeps
+   its corner, and the management actions take their own full row — nothing
+   spills past the panel edge at 390. */
+@media(max-width:720px){.studio-panel .list-row{flex-wrap:wrap}.studio-panel .list-info{flex:1 1 140px;min-width:0}.studio-panel .row-actions{flex:1 1 100%;justify-content:flex-start;margin-top:4px}.studio-panel .list-row>.badge{margin-left:auto}}
+/* Buyer-face saved header at phone width: the count chip stacks under the
+   title instead of colliding with it (flex-end + 150px min-width lost the
+   fight at 390). */
+@media(max-width:720px){.buy-head{flex-wrap:wrap}.buy-head .stat{min-width:0!important;flex:1 1 100%}}
