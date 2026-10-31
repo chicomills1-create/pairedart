@@ -48,7 +48,7 @@ PAIRED is a single-page app: the links below are app routes that open inside htt
 - Commissions: https://pairedart.com/#/commissions — how commissions run here: brief, pitch, structured proposal, stage rail, delivery.
 - Membership: https://pairedart.com/#/membership — the tiers above, with the full comparison table.
 - Founding 100: https://pairedart.com/#/founding100
-- Founders: https://pairedart.com/#/founders — Jeremy Mills (Founder & CEO) and Muse (AI Operations Partner).
+- Founder: https://pairedart.com/#/founders — Jeremy Mills (Founder & CEO), the founder of PAIRED. Built and operated with Muse (AI Operations Partner).
 
 ## Contact
 
