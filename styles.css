@@ -943,3 +943,83 @@ body.light .hero-feature figcaption span{color:#5D5570}
 .ops-panel .founder-mark img{width:100%;max-width:112px}
 @media(max-width:720px){.ops-panel{flex-direction:column;align-items:flex-start}}
 .hero-art .spot-img{background:#23262B}
+
+/* ════════════════════════════════════════════════════════════════════════
+   V57 — WHOLE-CANVAS OVERHAUL (2026-10-31). Appended last on purpose.
+   · Phone hero = a VERTICAL diptych: the piece full-width, the seam turned
+     horizontal, the artist frame full-width beneath with quote + caption
+     restored. No frame shares a row at 390px, so no name, caption or
+     fragment can be sliced by a neighbor again.
+   · Topbar: one line at phone width — the lead segment yields; the strap's
+     two key phrases (the marketplace + CREATE LOUDER) survive whole.
+   · Common Room faces: separate medallions on the thread, monograms whole.
+   · Messages: label row, then a deliberate snap rail of contacts.
+   · Top Sellers mark: medallion scale at every width. ════════════════ */
+.topbar .tb-lead{color:inherit}
+@media(max-width:720px){
+ .topbar{white-space:nowrap;font-size:10.5px;letter-spacing:1.6px;padding:8px 6px}
+ .topbar .tb-lead{display:none}
+ .lp-frames{grid-template-columns:minmax(0,1fr);gap:0}
+ .pair-seam{flex-direction:row;padding:12px 0;gap:12px}
+ .pair-seam-line{width:46px;height:1px;background:linear-gradient(90deg,var(--plum),var(--amber))}
+ .hero-artist-frame{padding:16px;gap:11px}
+ .haf-quote,.haf-cap{display:block}
+ .haf-top .artist-avatar{width:48px;height:48px;font-size:20px}
+ .haf-id b{font-size:17px;white-space:normal;overflow:visible;text-overflow:clip}
+ .haf-id span{font-size:12px}
+ .haf-actions .outline,.haf-actions .follow-btn{padding:11px 14px;font-size:11px}
+ .hero-feature figcaption{flex-wrap:wrap;row-gap:6px}
+ .room-face{margin:0 3px}
+ .room-face .artist-avatar{width:50px;height:50px;font-size:19px}
+ .hero-mark{width:104px}
+ .promise-bar .promise-mark{font-size:13.5px;letter-spacing:.4px}
+ .sound-worlds{grid-template-columns:minmax(0,1fr)}
+ .sound-world{aspect-ratio:16/10}
+}
+.room-faces{flex-wrap:wrap;row-gap:12px}
+.room-face{margin:0 5px}
+.chat-rail{display:contents}
+@media(max-width:720px){
+ .chat-list{display:block;padding:14px 14px 10px}
+ .chat-list>p{margin:0 0 10px}
+ .chat-rail{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;scrollbar-width:none}
+ .chat-rail::-webkit-scrollbar{display:none}
+ .chat-rail .chat-contact{scroll-snap-align:start}
+}
+.hero-mark{width:168px;max-width:38vw;display:block;filter:drop-shadow(0 18px 28px rgba(0,0,0,.55))}
+/* — Whole-canvas hardening (found by rendered probe, 2026-10-31): Syne 900
+   at 34px makes "MASTERPIECE." a 434px unbreakable word; as a grid item's
+   min-content it inflated the two-col track to 430px and Chrome expanded
+   the phone's whole layout viewport to 449 — every page re-laid 59px too
+   wide and cropped at the right edge. Three cures, one class:
+   (1) the page can never grow sideways again (clip creates no scroll
+   container, so the sticky header is untouched); (2) grid children may
+   shrink — a min-content bomb can no longer inflate a track; (3) phone
+   display type is sized for the canvas it lives on, with break-word as
+   the last-resort backstop for any future over-long word. */
+html,body{overflow-x:clip}
+.two-col>*{min-width:0}
+@media(max-width:720px){
+ .section-title,.page-title{font-size:clamp(25px,6.4vw,34px);overflow-wrap:break-word}
+ .detail-side h1{font-size:clamp(27px,7vw,40px);overflow-wrap:break-word}
+}
+/* ==== V57 DESKTOP HEADER GEOMETRY (measured defect, pre-existing) ====
+   The 8-link row's min-content (~645px at 1280, ~732px at 1600) exceeds
+   the middle column the bar gives it at every width below ~1850; with
+   justify-content:center the row spilled symmetrically — painting
+   EXPLORE over the wordmark's tail and THE COMMON ROOM under the
+   search button (geometry-probed at 1024/1150/1280/1366/1440/1600).
+   Cure, in the file's own band language: below 1600 the link row
+   collapses into the burger sheet (which carries all 8 links + search
+   + utilities, so nothing is lost) while the desk utilities stay —
+   the row cannot coexist with the full ≥1500 search field until
+   1600, where the tightened row clears brand and navright (probed);
+   1600–1849 the row shows tightened so its content fits its column;
+   at 1850+ the native sizing fits as designed (probed at 1920). */
+@media(min-width:1024px) and (max-width:1599px){
+ .navlinks{display:none}
+ .burger{display:inline-flex}
+}
+@media(min-width:1600px) and (max-width:1849px){
+ .navlinks{font-size:11px;gap:12px}
+}
