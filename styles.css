@@ -919,3 +919,27 @@ body.light .bridge-side{background:#FFFDF6;border-color:#D8CFBB}
 /* — Variant lines + the footer's one tagline signature — */
 .lp-variant{font-family:'Fraunces',serif;font-style:italic;color:var(--champagne);font-size:16px;margin:14px 0 4px}
 .foot-sign{font-family:'Fraunces',serif;font-style:italic;color:var(--champagne);font-size:13.5px;margin-top:10px}
+
+/* v56 — light-mode hero legibility (scoped: dark mode untouched), fill sections, safeguard modal, ops panel */
+body.light .hero.lp-hero{background:radial-gradient(600px 300px at 85% 0%,rgba(255,176,58,.16),transparent 60%),linear-gradient(180deg,rgba(246,242,233,.97),rgba(246,242,233,.99)),url('assets/plate-pandora.webp') center/cover no-repeat,#F4F0E8}
+body.light .lp-hero h1{color:#141518}
+body.light .lp-hero .eyebrow{color:#7A6234}
+body.light .lp-tagline{color:#6E5320}
+body.light .lp-hero .hero-sub{color:#33302A}
+body.light .lp-hero .proof{color:#33302A}
+body.light .haf-id b{color:#1C1E20}
+body.light .haf-id span{color:#5D5570}
+body.light .hero-artist-frame .haf-cap{color:#5D5570}
+body.light .hero-feature figcaption b{color:#1C1E20}
+body.light .hero-feature figcaption span{color:#5D5570}
+.section.fill{min-height:56vh;display:flex;align-items:center}
+.section.fill>.shell{width:100%}
+.guard-overlay{position:fixed;inset:0;background:rgba(8,6,18,.72);display:flex;align-items:center;justify-content:center;z-index:90;padding:20px}
+.guard-card{background:var(--panel);border:1px solid var(--violet);border-radius:20px;max-width:520px;width:100%;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.guard-card h3{color:var(--bone)}
+.ops-panel{display:flex;gap:26px;align-items:center;padding:34px}
+.ops-panel h3{font-family:'Fraunces',serif;font-size:30px;margin:2px 0 4px;color:var(--bone)}
+.ops-panel .founder-mark{background:transparent;width:112px;height:112px;flex:none}
+.ops-panel .founder-mark img{width:100%;max-width:112px}
+@media(max-width:720px){.ops-panel{flex-direction:column;align-items:flex-start}}
+.hero-art .spot-img{background:#23262B}
