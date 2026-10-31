@@ -44,6 +44,7 @@ PAIRED is a single-page app: the links below are app routes that open inside htt
 - Sell Art Online: https://pairedart.com/#/sell-art-online — for artists: how selling works here, the tiers, and what you keep.
 - Etsy Alternative: https://pairedart.com/#/etsy-alternative — a $200 sale run through both fee stacks; Etsy’s published components on one side, PAIRED’s one fee on the other.
 - Drops: https://pairedart.com/#/drops — themed drop events on a published rhythm: a new wall every other Friday at 6:00 PM, running through Sunday night.
+- The Common Room: https://pairedart.com/#/common — PAIRED's gathering place for scheduled, moderated meetups between creators. Announced as coming soon: the page carries an interest list and states plainly that it is not an active chat and not a reservation.
 - Commissions: https://pairedart.com/#/commissions — how commissions run here: brief, pitch, structured proposal, stage rail, delivery.
 - Membership: https://pairedart.com/#/membership — the tiers above, with the full comparison table.
 - Founding 100: https://pairedart.com/#/founding100

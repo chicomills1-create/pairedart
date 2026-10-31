@@ -810,3 +810,112 @@ body.has-mini .install-bar{bottom:calc(96px + env(safe-area-inset-bottom))}
 .founder-mark{display:flex;align-items:center;justify-content:center;background:#0B0D10}
 .founder-mark img{width:58%;max-width:300px;display:block}
 body.light .founder-mark{background:#F4F0E8}
+
+/* ════════════════════════════════════════════════════════════════════════
+   LOOK PASS V1 — THE PAIRING DESIGN LANGUAGE (2026-10-30; consult:
+   CONSULT-2026-10-30-CHATGPT-LOOKPASS.md). Appended last on purpose.
+   Plum #8B7CFF = creativity · Amber #FFB84D = connection; their meeting
+   is the Prism Duet. The hero shrinks to a doorway: headline, the one
+   tagline, search, then the catalog — pairing is composition, not size.
+   ════════════════════════════════════════════════════════════════════════ */
+:root{--plum:#8B7CFF;--amber:#FFB84D}
+/* — HERO as DIPTYCH (pattern 01): copy | [artwork MEETS artist] — */
+.hero.lp-hero{min-height:0;padding:46px 0 40px}
+.lp-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:42px;align-items:center;width:100%;position:relative;z-index:1}
+.lp-hero h1{font-size:clamp(31px,6.4vw,66px);line-height:1.05;letter-spacing:-.5px;margin:16px 0 10px;max-width:600px}
+.lp-tagline{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(17px,2vw,21px);color:var(--champagne);margin:0 0 12px}
+.lp-hero .hero-sub{font-size:16.5px}
+.lp-frames{display:grid;grid-template-columns:minmax(0,1.22fr) auto minmax(0,.92fr);align-items:stretch;min-width:0}
+.lp-frame{min-width:0;display:flex}
+.lp-frame .hero-feature{flex:1}
+.lp-frame-who{display:flex}
+.pair-seam{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:0 11px}
+.pair-seam-line{width:1px;height:44px;background:linear-gradient(180deg,var(--plum),var(--amber))}
+.pair-seam-word{font-size:10px;font-weight:900;letter-spacing:2.5px;color:var(--amber)}
+.hero-artist-frame{margin:0;flex:1;background:#1B1E22;border:1px solid #3B3F45;border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 24px 50px rgba(0,0,0,.45)}
+.haf-top{display:flex;gap:12px;align-items:center;min-width:0}
+.haf-top .artist-avatar{width:52px;height:52px;font-size:22px;flex:none}
+.haf-id{min-width:0}
+.haf-id b{font-family:'Syne','Fraunces',serif;font-size:19px;display:block;color:var(--bone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.haf-id span{color:var(--muted);font-size:12px}
+.haf-quote{margin:0;font-family:'Fraunces',serif;font-style:italic;font-size:15.5px;line-height:1.6;color:#D9D2C2}
+.haf-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+.haf-cap{color:var(--muted);font-size:12px;line-height:1.55}
+body.light .hero-artist-frame{background:#FFFDF6;border-color:#D8CFBB}
+body.light .haf-quote{color:#4A463C}
+@media(max-width:1023px){.lp-pair{grid-template-columns:minmax(0,1fr);gap:26px}}
+@media(max-width:720px){
+ .hero.lp-hero{padding:26px 0 22px}
+ .lp-hero h1{font-size:clamp(29px,8.4vw,38px);margin:12px 0 8px}
+ .lp-hero .hero-sub{font-size:14.5px;line-height:1.6}
+ .lp-hero .proof{display:none}
+ .lp-frames{grid-template-columns:minmax(0,1.18fr) auto minmax(0,.86fr)}
+ .pair-seam{padding:0 6px}.pair-seam-line{height:26px}
+ .hero-artist-frame{padding:12px;gap:9px}
+ .haf-quote,.haf-cap{display:none}
+ .haf-top .artist-avatar{width:40px;height:40px;font-size:17px}
+ .haf-id b{font-size:14.5px}.haf-id span{font-size:10.5px}
+ .haf-actions .outline,.haf-actions .follow-btn{padding:9px 11px;font-size:10.5px;letter-spacing:.3px}
+}
+/* — PRISM DUET (pattern 03): two colors meet across the tile's base — */
+.duet-bar{height:3px;border-radius:99px;background:linear-gradient(90deg,var(--duet-a),var(--duet-b));margin-top:16px}
+.duet-tile .cat-duet{position:absolute;left:0;right:0;bottom:0;height:4px;z-index:2;background:linear-gradient(90deg,var(--duet-a),var(--duet-b))}
+.duet-tile:hover{border-color:var(--duet-b)}
+/* — SPLIT FRAME (pattern 02): artist identity band inside every card — */
+.split-frame{border-top:1px solid #33373D}
+.split-artist{display:flex;gap:11px;align-items:center;padding:13px 16px 0;min-width:0}
+.split-artist .artist-avatar{width:40px;height:40px;font-size:16px;flex:none}
+.split-who{min-width:0;display:flex;flex-direction:column}
+.split-who b{font-family:'Syne','Fraunces',serif;font-size:14.5px;color:var(--bone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25}
+.split-what{font-size:11.5px;color:var(--muted)}
+.split-frame .art-body{padding:10px 19px 19px}
+body.light .split-frame{border-top-color:#D8CFBB}
+@media(max-width:720px){.split-artist{padding:10px 12px 0}.split-frame .art-body{padding:8px 12px 12px}}
+/* — THE OPEN PAIR (pattern 06): three doors, one composition — */
+.doors-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:19px;align-items:start}
+.door-card{position:relative;min-width:0}
+.door-num{font-family:'Fraunces',serif;font-weight:700;font-size:30px;color:var(--plum);display:block;line-height:1}
+.door-card[data-door="buyer"] .door-num{color:var(--amber)}
+.door-card[data-door="collab"] .door-num{color:#FF5C8A}
+.door-card h3{font-family:'Syne','Fraunces',serif;font-size:21px;margin:10px 0 8px}
+.door-form{grid-template-columns:minmax(0,1fr);gap:12px}
+@media(max-width:1023px){.doors-grid{grid-template-columns:minmax(0,1fr)}}
+/* — THE COMMON ROOM: paired portrait frames, one connecting thread,
+     a restrained duet glow. No chat bubbles, anywhere, ever. — */
+.room-door{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:center}
+.room-stage{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:26px;align-items:start}
+.room-faces{position:relative;display:flex;justify-content:center;align-items:center;padding:30px 6px;min-height:120px}
+.room-face{position:relative;z-index:1;margin:0 -7px}
+.room-face .artist-avatar{width:74px;height:74px;font-size:28px}
+.room-face:nth-child(odd) .artist-avatar{border-color:var(--plum)}
+.room-face:nth-child(even) .artist-avatar{border-color:var(--amber)}
+.room-thread{position:absolute;left:10%;right:10%;top:50%;height:2px;border-radius:99px;background:linear-gradient(90deg,var(--plum),var(--amber));opacity:.6;box-shadow:0 0 16px rgba(255,184,77,.30);z-index:0}
+.room-soon{background:#26221A;border:1px solid #8A6A2F;color:#FFD166;font-size:10.5px;letter-spacing:1.4px}
+.cr-flow{display:flex;flex-direction:column;gap:12px}
+.cr-block{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#1B1E22}
+.cr-block b{font-size:11px;font-weight:900;letter-spacing:1.6px}
+.cr-block p{margin:6px 0 0;color:var(--muted);line-height:1.65;font-size:14px}
+.cr-call{border-left:3px solid var(--plum);margin-right:24px}
+.cr-call b{color:var(--plum)}
+.cr-resp{border-left:3px solid var(--amber);margin-left:24px}
+.cr-resp b{color:var(--amber)}
+body.light .cr-block{background:#FFFDF6}
+@media(max-width:900px){.room-door{grid-template-columns:minmax(0,1fr);gap:22px}.room-stage{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:720px){.room-face .artist-avatar{width:56px;height:56px;font-size:21px}.room-faces{min-height:96px;padding:20px 4px}}
+/* — COLLABORATION BRIDGE (pattern 05): musician | THE PAIR | painter — */
+.bridge{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:18px;align-items:stretch;margin:4px 0 22px}
+.bridge-side{background:#1B1E22;border:1px solid #3B3F45;border-radius:16px;padding:20px;min-width:0}
+.bridge-side .artist-avatar{width:56px;height:56px;font-size:24px}
+.bridge-side h3{margin:2px 0 4px}
+.bridge-art{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block;margin:0 0 12px}
+.bridge-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;padding:4px}
+.bridge-mid b{font-family:'Syne','Fraunces',serif;font-size:14px;letter-spacing:2.5px;color:var(--bone)}
+.bridge-plus{font-size:9.5px;font-weight:800;letter-spacing:1.6px;color:var(--muted)}
+.bridge-eq{display:flex;gap:4px;align-items:flex-end;height:26px}
+.bridge-eq i{width:4px;border-radius:2px;background:linear-gradient(180deg,var(--amber),var(--plum))}
+.bridge-eq i:nth-child(1){height:10px}.bridge-eq i:nth-child(2){height:18px}.bridge-eq i:nth-child(3){height:26px}.bridge-eq i:nth-child(4){height:15px}.bridge-eq i:nth-child(5){height:21px}
+body.light .bridge-side{background:#FFFDF6;border-color:#D8CFBB}
+@media(max-width:720px){.bridge{grid-template-columns:minmax(0,1fr)}.bridge-mid{flex-direction:row;padding:2px}}
+/* — Variant lines + the footer's one tagline signature — */
+.lp-variant{font-family:'Fraunces',serif;font-style:italic;color:var(--champagne);font-size:16px;margin:14px 0 4px}
+.foot-sign{font-family:'Fraunces',serif;font-style:italic;color:var(--champagne);font-size:13.5px;margin-top:10px}
