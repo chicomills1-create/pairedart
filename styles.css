@@ -1088,3 +1088,71 @@ body.light .place-chip.on{background:#1d5c38;color:#b8ffd2}
    title instead of colliding with it (flex-end + 150px min-width lost the
    fight at 390). */
 @media(max-width:720px){.buy-head{flex-wrap:wrap}.buy-head .stat{min-width:0!important;flex:1 1 100%}}
+
+/* ================================================================
+   CENSUS-FINAL 2026-10-31 — v59 CURE SET (prepared in lookpass-work;
+   every rule below answers a measured defect in census-final-2026-10-31.md)
+   ================================================================ */
+/* L1 — Light theme: the champagne/bone family washed out on cream.
+   Measured: card artist names 1.12:1, .paint titles 2.09:1, detail price
+   2.09:1, step numerals 2.34:1, ops-panel name 1.12:1, eyebrows 4.39:1. */
+body.light .split-who b{color:#1C1E20}
+body.light .split-what{color:#5D5570}
+body.light .paint,body.light .gold{color:#7A6234}
+body.light .detail-price{color:#7A6234}
+body.light .hero-price{color:#7A6234}
+body.light .step .number,body.light .step.number{color:#7A6234}
+body.light .honesty-line{color:#7A6234}
+body.light .ops-panel h3{color:#1C1E20}
+body.light .ops-panel .founder-role{color:#4C4560}
+body.light .eyebrow{color:#446B0D}
+/* L2 — Artist hero in light: the inline dark gradient stack (authored
+   rgba(13,14,17,.78-.94) over the artist's piece) swallows the ink text.
+   Replace the stack with the house cream veil; text layer unchanged. */
+body.light .page-hero[style*="rgba(13,14,17"]{background-image:linear-gradient(180deg,rgba(255,254,247,.97),rgba(244,240,232,.95))!important}
+/* G1 — Commission-slots chip: an inline box whose border fragments when
+   its text wraps in narrow cards (Artists index, Founding 100 wall).
+   Make it a single flex pill; the text wraps INSIDE the outline. */
+.chip.slots-chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;max-width:100%;line-height:1.35;text-align:center}
+/* G2 — Sound Board brief foot: .brief-buyer{flex:1;min-width:0} collapses
+   to 0px wide beside the long note span; name/avatar/note paint over each
+   other at every width. Give the buyer a floor and let the note take its
+   own row when space is tight. */
+.brief-foot{flex-wrap:wrap}
+.brief-buyer{flex:1 1 170px;min-width:170px}
+.brief-foot>.meta{flex:1 1 100%}
+/* G3 — Compare table at phone width: min-width:560px hid the Paired and
+   Ensemble columns inside an un-signposted scroller. Fit all three tiers. */
+@media(max-width:720px){
+  table.compare{min-width:0}
+  .compare th,.compare td{padding:8px 5px;font-size:11.5px;line-height:1.45}
+  .compare th[scope="row"]{white-space:normal}
+}
+/* G4 — Founding 100 wall at phone width: panels span the row so the nested
+   piece cards (and their names) get full width instead of a 37px crush. */
+@media(max-width:720px){
+  .panel.f100-artist{grid-column:1/-1}
+}
+/* G5 — Studio section-top on phones is display:block; the primary action
+   sat on the title's glyphs (measured 4px box overlap, more in paint).
+   Give the action air. */
+@media(max-width:720px){
+  .section-top .primary{display:inline-block;margin-top:14px}
+}
+/* G6 — Top Sellers hero at phone width: shrink the orphaned mark and lift
+   the podium toward the fold (66px of the hero was empty bottom padding). */
+@media(max-width:720px){
+  .hero-mark{width:118px;max-width:118px}
+  .page-hero:has(.hero-mark){padding-bottom:34px}
+}
+/* G7 — Podium rank furniture (Home + Top Sellers) is inline-colored for the
+   dark board: gold #FFC94D / silver #D7DCE6 / copper #E39A5F titles and
+   medal rings, white rating numerals. On cream the silver measures ~1.3:1
+   and the gold ~1.6:1 — invisible. Deepen rank-by-rank in light only. */
+body.light .medal-num{border-color:#8A6D2F!important;color:#8A6D2F!important}
+body.light .art-grid>.panel:nth-child(2):has(>.medal-num)>.medal-num{border-color:#5D6B7A!important;color:#5D6B7A!important}
+body.light .art-grid>.panel:nth-child(3):has(>.medal-num)>.medal-num{border-color:#9A5B23!important;color:#9A5B23!important}
+body.light .art-grid>.panel:nth-child(1):has(>.medal-num)>div:nth-of-type(2){color:#8A6D2F!important}
+body.light .art-grid>.panel:nth-child(2):has(>.medal-num)>div:nth-of-type(2){color:#5D6B7A!important}
+body.light .art-grid>.panel:nth-child(3):has(>.medal-num)>div:nth-of-type(2){color:#9A5B23!important}
+body.light .panel:has(>.medal-num) b{color:#1C1E20!important}
