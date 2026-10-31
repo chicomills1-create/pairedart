@@ -109,7 +109,7 @@ function pairSeam(label){return '<div class="pair-seam" aria-hidden="true"><span
 function duetBar(a,b){return '<div class="duet-bar" style="--duet-a:'+(a||DUET_PLUM)+';--duet-b:'+(b||DUET_AMBER)+'" aria-hidden="true"></div>'}
 /* HERO ARTIST FRAME — the living half of the hero diptych: whoever made
    the piece on stage, in their own words (their catalog attestation). */
-function heroArtistFrame(){let pieces=SEED.filter(a=>a.img);if(!pieces.length)return '';let ix=Math.max(0,Math.min(state.spotIx||0,pieces.length-1));let cur=pieces[ix];let firstLine=String(cur.attest||'').split('. ')[0];return '<figure class="hero-artist-frame"><div class="haf-top">'+avatarMono(cur.artist)+'<div class="haf-id"><b>'+safe(cur.artist)+'</b><span>@'+safe(USERNAMES[cur.artist]||'')+' · '+safe(cur.category)+'</span></div></div><blockquote class="haf-quote">“'+safe(firstLine)+'.”</blockquote><div class="haf-actions"><a class="outline" href="#/artist/'+safe(USERNAMES[cur.artist]||'')+'" style="text-decoration:none;display:inline-flex;align-items:center">MEET THE ARTIST ↗</a>'+followBtn(cur.artist)+'</div><figcaption class="haf-cap">The artist behind the frame beside this one — every piece in this house has a person attached.</figcaption></figure>'}
+function heroArtistFrame(){let pieces=SEED.filter(a=>a.img);if(!pieces.length)return '';let ix=Math.max(0,Math.min(state.spotIx||0,pieces.length-1));let cur=pieces[ix];let firstLine=String(cur.attest||'').split('. ')[0];return '<figure class="hero-artist-frame" id="heroArtistFrame"><div class="haf-top">'+avatarMono(cur.artist)+'<div class="haf-id"><b id="hafName">'+safe(cur.artist)+'</b><span id="hafMeta">@'+safe(USERNAMES[cur.artist]||'')+' · '+safe(cur.category)+'</span></div></div><blockquote class="haf-quote" id="hafQuote">“'+safe(firstLine)+'.”</blockquote><div class="haf-actions"><a class="outline" id="hafMeet" href="#/artist/'+safe(USERNAMES[cur.artist]||'')+'" style="text-decoration:none;display:inline-flex;align-items:center">MEET THE ARTIST ↗</a>'+followBtn(cur.artist)+'</div><figcaption class="haf-cap">The artist behind the frame beside this one — every piece in this house has a person attached.</figcaption></figure>'}
 /* ── THE THREE EARLY-ACCESS DOORS (pattern 06, THE OPEN PAIR) ──
    Each door is its OWN short capture into its OWN list. The artist door
    is the canonical Founding 100 intake (same submit fn, same list) so
@@ -198,7 +198,19 @@ function spotShow(ix){try{let pieces=spotPieces();if(!pieces.length)return;ix=((
  let t=document.getElementById('heroCapTitle');if(t)t.textContent=a.title;
  let m=document.getElementById('heroCapMeta');if(m)m.textContent='by '+a.artist+' · '+a.medium;
  let p=document.getElementById('heroCapPrice');if(p)p.textContent=money(a.price);
- let tg=document.getElementById('heroTag');if(tg)tg.textContent='✦ '+a.tag}catch(e){}}
+ let tg=document.getElementById('heroTag');if(tg)tg.textContent='✦ '+a.tag;
+ /* v54 FIX — the artist half of the diptych tracks the SAME rotation:
+    when the piece on stage changes, its artist changes in the same
+    beat. In-place text/attribute swaps only (mirrors the caption
+    updates above) — no re-render, no new timer, no layout shift. */
+ let haf=document.getElementById('heroArtistFrame');
+ if(haf){let av=haf.querySelector?haf.querySelector('.artist-avatar'):null;if(av)av.textContent=monogram(a.artist);
+  let hn=document.getElementById('hafName');if(hn)hn.textContent=a.artist;
+  let hm=document.getElementById('hafMeta');if(hm)hm.textContent='@'+(USERNAMES[a.artist]||'')+' · '+a.category;
+  let hq=document.getElementById('hafQuote');if(hq)hq.textContent='“'+String(a.attest||'').split('. ')[0]+'.”';
+  let hMeet=document.getElementById('hafMeet');if(hMeet&&hMeet.setAttribute)hMeet.setAttribute('href','#/artist/'+(USERNAMES[a.artist]||''));
+  let fb=haf.querySelector?haf.querySelector('.follow-btn'):null;
+  if(fb){let on=isFollowing(a.artist);if(fb.setAttribute){fb.setAttribute('data-artist',a.artist);fb.setAttribute('aria-pressed',on?'true':'false')}if(fb.dataset)fb.dataset.artist=a.artist;if(fb.classList)fb.classList.toggle('following',on);fb.textContent=on?'✦ FOLLOWING':'✦ FOLLOW'}}}catch(e){}}
 let spotTimer=null,spotPaused=false;
 function spotInit(){try{if(spotTimer){clearInterval(spotTimer);spotTimer=null}
  let fig=document.getElementById('heroFeature');if(!fig||!fig.addEventListener)return;if(spotPieces().length<2)return;
@@ -207,6 +219,13 @@ function spotInit(){try{if(spotTimer){clearInterval(spotTimer);spotTimer=null}
  fig.addEventListener('mouseleave',function(){spotPaused=false});
  fig.addEventListener('focusin',function(){spotPaused=true});
  fig.addEventListener('focusout',function(){spotPaused=false});
+ /* v54: the artist frame pauses the same rotation — its Meet/Follow
+    actions must never rotate out from under the visitor's cursor. */
+ let hafEl=document.getElementById('heroArtistFrame');
+ if(hafEl&&hafEl.addEventListener){hafEl.addEventListener('mouseenter',function(){spotPaused=true});
+ hafEl.addEventListener('mouseleave',function(){spotPaused=false});
+ hafEl.addEventListener('focusin',function(){spotPaused=true});
+ hafEl.addEventListener('focusout',function(){spotPaused=false})}
  let reduce=false;try{reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){}
  if(reduce)return;
  spotTimer=setInterval(function(){if(!spotPaused)spotShow((state.spotIx||0)+1)},6000);
