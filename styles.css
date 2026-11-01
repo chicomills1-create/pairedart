@@ -1156,3 +1156,38 @@ body.light .art-grid>.panel:nth-child(1):has(>.medal-num)>div:nth-of-type(2){col
 body.light .art-grid>.panel:nth-child(2):has(>.medal-num)>div:nth-of-type(2){color:#5D6B7A!important}
 body.light .art-grid>.panel:nth-child(3):has(>.medal-num)>div:nth-of-type(2){color:#9A5B23!important}
 body.light .panel:has(>.medal-num) b{color:#1C1E20!important}
+
+/* ═══ V60 — BUYER & SELLER SECTIONS ═══
+   Persistent preview strip, 4/5-step rows, the price ladder and
+   fee lists for #/buyers + #/sellers. Appended last; wins ties. */
+/* Preview strip — unobtrusive, present on both new pages. */
+.preview-strip{display:flex;gap:12px;align-items:baseline;background:#171029;border:1px solid var(--line);border-radius:12px;padding:13px 18px;margin:0 0 30px;color:var(--muted);font-size:13px;line-height:1.6}
+.preview-strip b{color:var(--gold);letter-spacing:2px;font-size:11px;white-space:nowrap}
+body.light .preview-strip{background:#f4efe3;border-color:#ddd2ba;color:#5d5570}
+body.light .preview-strip b{color:#7A6234}
+/* Step rows wider than the house 3-col default. */
+.bs-steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.bs-steps5{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+.bs-steps4 .step h3 .launch-tag,.bs-steps5 .step h3 .launch-tag{vertical-align:middle}
+@media(max-width:1050px){.bs-steps4,.bs-steps5{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.bs-steps4,.bs-steps5{grid-template-columns:1fr}}
+/* Price ladder — band cards with real stocked originals. */
+.ladder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:19px}
+@media(max-width:1050px){.ladder-grid{grid-template-columns:1fr}}
+.band-span{font-family:'Syne','Fraunces',serif;font-size:32px;font-weight:900;margin:6px 0 8px}
+.band-row{display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px dashed #43364f;color:inherit}
+.band-row:last-child{border-bottom:0}
+.band-title{flex:1 1 auto;min-width:0;font-weight:700}
+.band-who{color:var(--muted);font-size:12px;white-space:nowrap}
+.band-row b{white-space:nowrap}
+body.light .band-row{border-bottom-color:#ddd2ba}
+body.light .band-who{color:#5d5570}
+/* Plain fee lists inside panels (seller $200 + acceptance blocks). */
+.fee-list{line-height:2.05;padding-left:18px;margin:0}
+.fee-list li{margin:2px 0}
+/* V60 header fit — the two new doors widen the desktop nav past the
+   bar at >=1500px (measured: links overlapped the brand, last door
+   truncated). Tighten the link rhythm at that band only; all ten
+   doors stay full-label inside the bar. */
+@media(min-width:1500px) and (max-width:1849px){header .nav .navlinks{gap:8px;font-size:11px}header .navlinks a{letter-spacing:.04em}header .nav{gap:10px}header .navsearch{flex:0 0 auto}.navsearch .field,.navsearch .search-go{display:none}header .navsearch .search-toggle{display:inline-block}header .navsearch.open .field{display:block}}
+@media(min-width:1850px){header .nav .navlinks{gap:12px;font-size:12px}header .navlinks a{letter-spacing:.08em}}
