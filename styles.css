@@ -1203,3 +1203,23 @@ body.light .band-who{color:#5d5570}
 .role-pick{gap:10px}
 .navlinks a[href="#/studio"],.navlinks a[href="#/studio/buy"]{color:var(--gold)}
 body.light .role-strip{box-shadow:0 0 0 1px rgba(124,60,255,.4)}
+
+/* ═══ V62 — FLIP BUILD ═══
+   The dormant buy block on every listing (action, statement disclosure,
+   structured shipping line, policy door), the published policy's
+   document rhythm, and the Instant Membership code card. Everything
+   else rides the house panels, steps and lists verbatim. */
+.buy-block{margin:20px 0;padding:20px}
+.buy-cta{width:100%;justify-content:center;display:inline-flex;align-items:center}
+.buy-disclosure{margin-top:12px;font-weight:700;color:#fff;line-height:1.6}
+.ship-line{margin-top:8px;line-height:1.65;color:var(--muted)}
+.buy-policy{margin-top:10px}
+.policy-doc h3{font-family:'Syne',serif;font-size:24px;letter-spacing:.5px;margin:28px 0 10px}
+.policy-doc h3:first-child{margin-top:0}
+.policy-doc p{line-height:1.75;color:var(--muted);max-width:780px}
+.policy-doc .fee-list{max-width:780px}
+.policy-doc .fee-list li{margin-bottom:10px;line-height:1.7}
+.verify-code{font-family:'Syne',serif;font-size:clamp(30px,8vw,44px);letter-spacing:4px;color:var(--gold);border:2px dashed rgba(255,215,106,.55);border-radius:14px;padding:16px 20px;text-align:center;margin:14px 0;word-break:break-all}
+@media (max-width:480px){.verify-code{font-size:24px;letter-spacing:2px;padding:14px 10px;word-break:normal}}
+body.light .buy-disclosure{color:#14100d}
+body.light .verify-code{border-color:rgba(160,110,0,.6)}

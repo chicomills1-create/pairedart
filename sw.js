@@ -3,12 +3,12 @@
    seen, so the installed front door opens offline. The app itself is
    localStorage-driven, so with the shell cached it keeps working.
    Not promised here: push, background sync, offline form posts.
-   Cache name: paired-shell-v61 (PAIRED brand). The activate handler below
+   Cache name: paired-shell-v62 (PAIRED brand). The activate handler below
    retires every other cache on first run, including the old pp-shell line.
    Rules: GET only, same-origin only, POST and cross-origin are never
    touched. Pages are network-first; static assets are cache-first. */
-const CACHE = 'paired-shell-v61';
-const CORE = ['/', '/index.html', '/app.js?v=61', '/styles.css?v=61', '/manifest.webmanifest'];
+const CACHE = 'paired-shell-v62';
+const CORE = ['/', '/index.html', '/app.js?v=62', '/styles.css?v=62', '/manifest.webmanifest'];
 const ASSETS = ['/icon-192.png', '/icon-512.png', '/maskable-512.png',
   '/apple-touch-icon.png', '/assets/scales-bg-ballpython.jpg', '/assets/tile-painting.webp', '/assets/tile-digital.webp', '/assets/tile-illustration.webp', '/assets/tile-photography.webp', '/assets/tile-sculpture.webp', '/assets/tile-mixed.webp', '/assets/tile-portraits.webp', '/assets/tile-pets.webp', '/assets/tile-all.webp', '/assets/hero-plate.webp',
   '/assets/paired-mark.svg', '/assets/founders-plate.webp', '/assets/plate-pandora.webp',
