@@ -1236,3 +1236,5 @@ body.light .verify-code{border-color:rgba(160,110,0,.6)}
 .auth-code{letter-spacing:6px;font-size:20px;text-align:center}
 .auth-linkbtn{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0}
 .auth-down{padding:4px 0}
+
+#clerk-captcha{display:flex;justify-content:center;margin:2px 0 10px;min-height:1px}
