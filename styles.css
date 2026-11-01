@@ -1223,3 +1223,16 @@ body.light .role-strip{box-shadow:0 0 0 1px rgba(124,60,255,.4)}
 @media (max-width:480px){.verify-code{font-size:24px;letter-spacing:2px;padding:14px 10px;word-break:normal}}
 body.light .buy-disclosure{color:#14100d}
 body.light .verify-code{border-color:rgba(160,110,0,.6)}
+
+/* ═══ ACCOUNTS v63 — CLERK DOORS ═══
+   The sign-in/sign-up furniture for the Clerk-backed forms: the "or"
+   divider between the email and Google doors, the full-width Google
+   button, the verification-code input, underline text-buttons inside
+   form notes, and the unavailable-state panel. Everything else reuses
+   the house panel/form system — no third-party widget styling. */
+.auth-or{display:flex;align-items:center;gap:12px;margin:16px 0;font-size:11px;letter-spacing:2px;color:#9aa3ad}
+.auth-or:before,.auth-or:after{content:'';flex:1;height:1px;background:#3B3F45}
+.auth-google{width:100%;justify-content:center;text-align:center}
+.auth-code{letter-spacing:6px;font-size:20px;text-align:center}
+.auth-linkbtn{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0}
+.auth-down{padding:4px 0}
