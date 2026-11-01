@@ -1190,4 +1190,16 @@ body.light .band-who{color:#5d5570}
    truncated). Tighten the link rhythm at that band only; all ten
    doors stay full-label inside the bar. */
 @media(min-width:1500px) and (max-width:1849px){header .nav .navlinks{gap:8px;font-size:11px}header .navlinks a{letter-spacing:.04em}header .nav{gap:10px}header .navsearch{flex:0 0 auto}.navsearch .field,.navsearch .search-go{display:none}header .navsearch .search-toggle{display:inline-block}header .navsearch.open .field{display:block}}
-@media(min-width:1850px){header .nav .navlinks{gap:12px;font-size:12px}header .navlinks a{letter-spacing:.08em}}
+@media(min-width:1850px){header .nav .navlinks{gap:9px;font-size:11px}header .navlinks a{letter-spacing:.05em}}
+
+
+/* ═══ V61 — ACCOUNTS + ROLE DASHBOARDS ═══
+   The identity layer's only new surfaces: the role strip in the Studio
+   hero, the signup role picker (rides .brief-types/.type-card), and the
+   gold DASHBOARD door in the signed-in nav. Everything else reuses the
+   Studio's panels, stats and rows verbatim. */
+.role-strip{box-shadow:0 0 0 1px rgba(124,60,255,.28)}
+.role-strip .actions{display:flex;gap:10px;flex-wrap:wrap}
+.role-pick{gap:10px}
+.navlinks a[href="#/studio"],.navlinks a[href="#/studio/buy"]{color:var(--gold)}
+body.light .role-strip{box-shadow:0 0 0 1px rgba(124,60,255,.4)}
