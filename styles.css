@@ -1237,4 +1237,15 @@ body.light .verify-code{border-color:rgba(160,110,0,.6)}
 .auth-linkbtn{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0}
 .auth-down{padding:4px 0}
 
+/* ═══ PAIRED SOUND — COMMERCE (v64) ═══ */
+.preview-badge{background:#3d2a12;color:#ffd76a}
+.held-badge{background:#5c1f2e;color:#ffb3c1}
+.cap-table{margin-top:14px}
+.cap-meter{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:6px}
+.track-row .preview-badge{flex:none}
+.shelf-track .mini-btn{flex:none}
+.buy-economics{font-weight:800;color:var(--lime);line-height:1.7;margin-top:10px}
+body.light .preview-badge{background:#f3e2b3;color:#7a5410}
+body.light .held-badge{background:#f6ccd4;color:#8c2438}
+
 #clerk-captcha{display:flex;justify-content:center;margin:2px 0 10px;min-height:1px}
