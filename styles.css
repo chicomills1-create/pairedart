@@ -1257,3 +1257,14 @@ body.light .held-badge{background:#f6ccd4;color:#8c2438}
    way" is visible instead of a silent cut. */
 @media(min-width:1024px){.pills.scroll{flex-wrap:wrap;overflow-x:visible}}
 @media(max-width:1023px){.pills.scroll{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 44px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 44px),transparent 100%)}}
+
+
+/* HUMAN-MADE PROOF LAYER (v68, 2026-11-01) — pledge band in the hero bands, the
+   verified mark on cards and detail pages, and the From the Studio slot. */
+.pledge-band{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:11px 18px;border:1px solid var(--lime);border-radius:100px;background:rgba(187,250,70,.08);color:#eaffd0;font-weight:900;letter-spacing:1.6px;font-size:12.5px;line-height:1.5}
+.pledge-band .pz{color:var(--lime)}
+.hm-row{padding:10px 19px 0}
+.hm-mark{display:inline-flex;align-items:center;gap:6px;color:var(--lime);font-size:10.5px;font-weight:900;letter-spacing:1.2px}
+.studio-slot{margin:18px 0;padding:20px;border:1px solid #433555;border-radius:16px;background:#181328}
+.studio-note{line-height:1.75;color:#e6dff2;margin:0 0 10px}
+.studio-photo{width:100%;border-radius:12px;margin:0 0 10px;display:block}
