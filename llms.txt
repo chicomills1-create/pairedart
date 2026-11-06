@@ -1,6 +1,6 @@
 # PAIRED
 
-> PAIRED is an online marketplace where independent artists sell original, human-made art and take commissions directly from collectors. No AI-generated work is sold here. Front door: https://pairedart.com/
+> PAIRED is an online marketplace where independent artists sell original, human-made art and take commissions directly from collectors. It is the paired artist network: artists and collectors paired directly, the artist’s name before the price. No AI-generated work is sold here. Front door: https://pairedart.com/
 
 PAIRED is built for the next generation of artists, and for collectors who would rather buy from a person than a warehouse. You browse by category, message the artist who made the piece, and agree the work in that same conversation — the artist's name comes before the price.
 
