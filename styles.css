@@ -1298,3 +1298,9 @@ body.light .held-badge{background:#f6ccd4;color:#8c2438}
 .why-row b{color:#fff;font-size:15px;display:block;margin-bottom:4px}
 .why-row p{color:#e6dff2;font-size:13.5px;line-height:1.7;margin:0 0 9px}
 @media(max-width:820px){.why-grid{grid-template-columns:1fr}}
+
+/* v72 — canonical brand lockup: one wordmark on every route (cold-user census cure) */
+.brand{font-family:'Fraunces',serif;font-weight:600;letter-spacing:.4px;background:none;-webkit-background-clip:initial;background-clip:initial;color:#f3ead8;text-shadow:none;white-space:nowrap}
+.brand-py{background:var(--prism);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand-emblem{width:34px;height:34px;border-radius:50%;object-fit:contain;background:transparent;flex:none}
+.sound-stage .tag{top:auto;max-width:calc(100% - 28px);white-space:normal}
