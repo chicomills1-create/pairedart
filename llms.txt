@@ -10,7 +10,7 @@ PAIRED is built for the next generation of artists, and for collectors who would
 - The house rule: real art, by real artists, signed by the hand that made it.
 - Human-made only: no AI-generated work is sold here.
 - Open to teenagers and adults: you must be 13 or older to join. PAIRED does not create accounts for children under 13.
-- Current state, stated on the site itself: the front door is a working prototype — demo purchases and memberships are not live.
+- Current state, stated on the site itself: Memberships are live. Art purchases open artist by artist as listings activate; demo pieces never sell.
 
 ## House rules on money
 
