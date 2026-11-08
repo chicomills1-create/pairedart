@@ -1728,7 +1728,7 @@ let pwaLastPath=null; // last route render() served — a change = engagement (d
    protections are labeled PLANNED, nothing transactional is
    promised as live, and every figure traces to TIER_DATA or the
    printed comparison basis. ═══ */
-function previewStrip(){return `<div class="preview-strip"><b>PREVIEW</b><span>PAIRED is being built in the open. Browsing, saving, the Commission Board and the lists on this page work today, on this device. Payments, purchases and payouts are not yet active — they switch on with the production launch, and nothing here pretends otherwise.</span></div>`}
+function previewStrip(){return `<div class="preview-strip"><b>PREVIEW</b><span>PAIRED is being built in the open. Browsing, saving, the Commission Board and the lists on this page work today, on this device. Memberships are live — joining takes you to secure checkout. Art purchases open artist by artist as listings activate, and nothing here pretends otherwise.</span></div>`}
 const LADDER_BANDS=[
  {name:'First Original',lo:175,hi:249,line:'The first original on your wall — a real one-of-one at a first-collector price.'},
  {name:'Everyday Statement',lo:250,hi:399,line:'The piece a room gets built around — originals with presence.'},
