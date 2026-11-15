@@ -1328,3 +1328,16 @@ body.light .buy-disclosure{color:#5d5570}
 .buy-block{padding:26px}
 .buy-block .buy-disclosure{margin-top:16px}
 @media(max-width:720px){.tier{padding:30px 24px 32px}.membership{gap:22px}}
+
+/* ═══ v80 — ENGINE-WIRED SURFACES ═══
+   Server faces reuse the house classes; only the few shapes the engine
+   surfaces introduce get rules here: inline action clusters inside list
+   rows, room post cards, the second-factor code field, and full-bleed
+   listing thumbs. */
+.srv-inline{display:inline-flex;gap:8px;flex-wrap:wrap;align-items:center}
+.srv-inline .field{width:auto;min-width:130px;padding:9px 12px;font-size:13px}
+.list-thumb img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.room-post{padding:22px}
+.room-reply{margin-left:clamp(10px,4vw,44px);border-left:3px solid #39D0C4}
+.srv-code{letter-spacing:.35em;font-size:20px;text-align:center}
+.detail-art .art-photo{width:100%;height:100%;object-fit:cover}
