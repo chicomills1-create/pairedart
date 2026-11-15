@@ -948,6 +948,7 @@ function pairedRefreshFounding(){
  if(_pairedFoundingFlight)return;
  _pairedFoundingFlight=pairedApi('/v1/founding/status').then(function(r){
   _pairedFoundingFlight=null;
+  try{srvMarkDown('founding',!(r&&r.ok))}catch(e){}
   if(r&&r.ok){let norm=pairedFoundingNorm(r.data);
    if(norm){let changed=JSON.stringify(window.__pairedFounding||null)!==JSON.stringify(norm);window.__pairedFounding=norm;
     if(changed){try{if((location.hash||'').indexOf('#/founding100')===0)render()}catch(e){}}}}
@@ -973,6 +974,7 @@ function pairedServerTier(){
  }catch(e){return null}
 }
 function foundingBadgeText(){
+ try{if(pairedSignedIn()&&srvIsDown('founding'))return '● ENGINE UNAVAILABLE — YOUR APPLICATION RECORD IS SAFE ON THE SERVER; IT SHOWS HERE AGAIN WHEN THE ENGINE RESPONDS'}catch(e){}
  try{let f=(typeof window!=='undefined'&&window.__pairedFounding)||null;
   if(f&&f.status==='pending')return 'APPLICATION RECEIVED — UNDER REVIEW · CONFIRMED BY THE PAIRED ENGINE';
   if(f&&f.status==='approved')return 'APPLICATION APPROVED — FOUNDING SEAT CONFIRMED BY THE PAIRED ENGINE';
@@ -1476,11 +1478,15 @@ ${props.length?`<section class="section"><div class="shell"><div class="section-
 function founding100(){
  try{pairedRefreshFounding()}catch(e){}
  let apps=foundingApps(),claimed=foundingSeatsClaimed(),pct=Math.min(100,Math.round(claimed/100*100));
+ /* V80-02 (founding leg): signed in with the founding fetch down, the
+    counter panel is the unavailable state — never the device count. */
+ let fDown=false;try{fDown=pairedSignedIn()&&srvIsDown('founding')}catch(e){}
+ let counterHtml=fDown?srvDownInner():'<div class="panel f100-counter"><div class="eyebrow">Seats claimed — counted honestly</div><div class="f100-bignum">'+claimed+'<span class="f100-of"> of 100 seats claimed</span></div><div class="f100-bar" role="img" aria-label="'+claimed+' of 100 founding seats claimed"><div class="f100-fill" style="width:'+pct+'%"></div></div>'+foundingCounterNote()+'</div>';
  let lanes=MIX_LANES.map(l=>({...l,count:apps.filter(a=>a.lane===l.key).length}));
  let otherCount=apps.filter(a=>a.lane==='other').length;
  let stable=Object.keys(USERNAMES).map(n=>({name:n,handle:USERNAMES[n],piece:all().find(a=>a.artist===n)})).filter(x=>x.piece);
  return `<div class="page-hero f100-hero"><div class="shell"><div class="eyebrow" style="color:#ffd76a">✦ The Founding 100 ✦</div><h1 class="page-title">THE FIRST 100 <span class="gold">BUILD THE HOUSE.</span></h1><p class="sub" style="max-width:660px">Before the crowds and the drops, there is a first hundred: the artists who open PAIRED with us — the first studios on the wall, the first names buyers learn, the founding class this marketplace is built around. A Founding Paired is not a discount. It is a name in the foundation, a badge that never expires, and the best price we will ever offer — locked before the doors open. <b style="color:#fff">Art isn’t mass-produced. Neither are you.</b></p><div class="actions"><button class="primary" data-action="scrollto" data-target="foundingApply">APPLY FOR A FOUNDING SEAT ↓</button><a class="outline" href="#/board" style="text-decoration:none;display:inline-flex;align-items:center">SEE THE DEMAND WALL →</a></div></div></div>
-<section class="section" style="padding-bottom:0"><div class="shell"><div class="panel f100-counter"><div class="eyebrow">Seats claimed — counted honestly</div><div class="f100-bignum">${claimed}<span class="f100-of"> of 100 seats claimed</span></div><div class="f100-bar" role="img" aria-label="${claimed} of 100 founding seats claimed"><div class="f100-fill" style="width:${pct}%"></div></div>${foundingCounterNote()}</div></div></section>
+<section class="section" style="padding-bottom:0"><div class="shell">${counterHtml}</div></section>
 <section class="section"><div class="shell two-col"><div class="panel" style="border:2px solid #7a3cff"><div class="eyebrow">✦ The founding offer</div><h2 class="section-title" style="font-size:32px">PAIRED AT $${FOUNDING_PRICE}/MO. <span class="paint">LOCKED.</span></h2><ul style="line-height:2.05;padding-left:18px"><li><b style="color:#fff">Paired at $${FOUNDING_PRICE}/month, locked for ${FOUNDING_MONTHS} months</b> — standard Paired is ${TIER_DATA[1].price}/mo, and the founding price never moves during the lock.</li><li><b style="color:#fff">60 days free</b> while you onboard and hang your first work.</li><li><b style="color:#fff">The Founding Paired badge</b> — on your studio, forever. It cannot be bought later.</li><li><b style="color:#fff">Unlimited listings, commissions, and analytics</b> — the full Paired stage from day one.</li><li><b style="color:#fff">5% per sale</b> — you keep $${TIER_DATA[1].keep200} on a $200 sale, after platform fee · processing shown at checkout.</li></ul><p class="form-note">Monthly only: no annual founding price exists, and none will be invented. Cancel in two taps, always — that promise is house law.</p><div class="actions" style="margin-top:14px"><button class="primary" data-action="scrollto" data-target="foundingApply">APPLY NOW ↓</button></div></div>
 <aside class="panel f100-econ"><div class="eyebrow">Founder economics</div><h3 style="margin-bottom:8px">WHY JOIN NOW — THE MATH, PLAIN.</h3><p class="sub" style="margin-bottom:10px">On a $200 sale, after platform fee:</p><div style="font-size:15px;line-height:2">Solo (free): keep <b>$${TIER_DATA[0].keep200}</b><br>Paired: keep <b>$${TIER_DATA[1].keep200}</b><br>Ensemble: keep <b>$${TIER_DATA[2].keep200}</b></div><p style="line-height:1.8;margin-top:12px">The founding lock: (${TIER_DATA[1].price} − $${FOUNDING_PRICE.toFixed(2)}) × ${FOUNDING_MONTHS} months = <b style="color:#fff">${money(FOUNDING_LOCK_SAVE)} saved</b> against standard Paired — before you sell a single piece. Add ${FOUNDING_FREE_DAYS} free days up front, and a badge no later artist can ever hold.</p><p class="form-note">Every keep figure is after platform fee — processing shown at checkout, no surprises, ever.</p></aside></div></section>
 <section class="section alt"><div class="shell"><div class="section-top"><div><div class="eyebrow">The founding mix</div><h2 class="section-title">THE MIX WE’RE <span class="paint">BUILDING TOWARD.</span></h2><p class="sub">Targets, not results — a founding class with range. The counts move only when real applications land; nothing here is a claim about who has joined.</p></div></div><div class="mix-lanes">${lanes.map(l=>`<div class="panel mix-lane"><div class="f100-lane-num">${l.target}</div><h3>${l.label}</h3><p class="sub" style="min-height:66px">${l.blurb}</p><div class="lane-bar"><div class="lane-fill" style="width:${Math.min(100,l.count/l.target*100)}%"></div></div><p class="meta" style="margin-top:8px">${l.count} applied on this device · target ${l.target}</p></div>`).join('')}</div>${otherCount?`<p class="meta" style="margin-top:14px">Plus ${otherCount} application${otherCount===1?'':'s'} across every other craft — the whole menagerie belongs in this house.</p>`:''}</div></section>
@@ -2427,6 +2433,7 @@ function foundingFormNote(){
  return '<p class="form-note">Demo honesty: this application is stored only in this browser (slither-founding-v1) and is never sent anywhere. The real Founding 100 cohort opens with the production launch; applying here holds your place in line on this device and shows you exactly how intake will work.</p>';
 }
 function foundingAppsHeading(){
+ try{if(pairedSignedIn()&&srvIsDown('founding'))return '<div class="eyebrow">Your application — status held on the engine</div>'}catch(e){}
  try{let f=(typeof window!=='undefined'&&window.__pairedFounding)||null;if(f&&f.status)return '<div class="eyebrow">Your application — on the engine record</div>'}catch(e){}
  return '<div class="eyebrow">Your application on this device</div>';
 }
@@ -2563,7 +2570,7 @@ function srvAdminOrder(oid,kind){
 function srvAction(btn){
  let a=btn.dataset.srv;
  if(a==='resend-2fa'){PairedAuth.signInResendSecondFactor().then(function(){toast('A fresh code is on its way ✦')}).catch(function(e){toast(e.message||'The resend did not land.')});return}
- if(a==='retry'){_srvDown={};try{pairedRefreshMe(true)}catch(e){}try{pairedRefreshStudio(true)}catch(e){}try{pairedRefreshArtist()}catch(e){}try{pairedRefreshVerification()}catch(e){}try{pairedRefreshBriefs()}catch(e){}try{pairedRefreshRoom(true)}catch(e){}try{pairedRefreshAdmin()}catch(e){}let hp=(location.hash||'').split('/');if(hp[1]==='piece')try{pairedRefreshPiece(hp[2])}catch(e){}if(hp[1]==='wall')try{pairedRefreshWall(hp[2])}catch(e){}if(hp[1]==='brief')try{pairedRefreshBrief(hp[2])}catch(e){}if(hp[1]==='common'&&hp[2]==='thread')try{pairedRefreshThread(hp[3])}catch(e){}srvRerender();return}
+ if(a==='retry'){_srvDown={};try{pairedRefreshMe(true)}catch(e){}try{pairedRefreshFounding()}catch(e){}try{pairedRefreshStudio(true)}catch(e){}try{pairedRefreshArtist()}catch(e){}try{pairedRefreshVerification()}catch(e){}try{pairedRefreshBriefs()}catch(e){}try{pairedRefreshRoom(true)}catch(e){}try{pairedRefreshAdmin()}catch(e){}let hp=(location.hash||'').split('/');if(hp[1]==='piece')try{pairedRefreshPiece(hp[2])}catch(e){}if(hp[1]==='wall')try{pairedRefreshWall(hp[2])}catch(e){}if(hp[1]==='brief')try{pairedRefreshBrief(hp[2])}catch(e){}if(hp[1]==='common'&&hp[2]==='thread')try{pairedRefreshThread(hp[3])}catch(e){}srvRerender();return}
  if(a==='view'){let lid=btn.dataset.lid;if(lid&&pairedSignedIn()){try{pairedApi('/v1/listings/'+lid+'/view',{method:'POST',timeoutMs:8000}).then(function(){})}catch(e){}}return}
  if(a==='buy')return srvBuy(btn.dataset.lid);
  if(a==='save')return srvSaveToggle(btn.dataset.lid);
