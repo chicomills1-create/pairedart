@@ -1307,3 +1307,24 @@ body.light .held-badge{background:#f6ccd4;color:#8c2438}
 .brand-py{background:var(--prism);-webkit-background-clip:text;background-clip:text;color:transparent}
 .brand-emblem{width:34px;height:34px;border-radius:50%;object-fit:contain;background:transparent;flex:none}
 .sound-stage .tag{top:auto;max-width:calc(100% - 28px);white-space:normal}
+
+/* v78 — spacing & declutter pass (founder note 2026-11-15: the GO PAIRED
+   button hugged the text; the card-statement disclosure read as a headline).
+   Air between blocks, tier CTAs on their own full-width line at the card
+   foot, disclosure set as fine print. Disclosure WORDS unchanged everywhere
+   — presentation only. */
+.tier{display:flex;flex-direction:column;padding:36px 32px 38px}
+.tier h3{margin:12px 0 8px}
+.tier .amount{margin:8px 0 6px}
+.tier-blurb{margin:14px 0 6px}
+.tier ul{margin:16px 0 26px}
+.tier>a.primary,.tier>a.outline,.tier>button{margin-top:auto;width:100%;display:inline-flex;align-items:center;justify-content:center;text-align:center}
+.tier .buy-disclosure{margin-top:16px}
+.buy-disclosure{font-size:12px;font-weight:500;color:var(--muted);line-height:1.65;margin-top:14px}
+body.light .buy-disclosure{color:#5d5570}
+.membership{gap:24px}
+.compare-panel{margin-top:26px}
+.actions .buy-disclosure{flex:1 1 100%;margin-top:16px}
+.buy-block{padding:26px}
+.buy-block .buy-disclosure{margin-top:16px}
+@media(max-width:720px){.tier{padding:30px 24px 32px}.membership{gap:22px}}
