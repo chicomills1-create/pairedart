@@ -925,6 +925,7 @@ function pairedRefreshMe(force){
  if(!force&&Date.now()-_pairedMeAt<15000)return;
  _pairedMeFlight=pairedApi('/v1/me').then(function(r){
   _pairedMeFlight=null;_pairedMeAt=Date.now();
+  try{srvMarkDown('me',!(r&&r.ok))}catch(e){}
   if(r&&r.ok&&r.data&&typeof r.data==='object'){
    let changed=JSON.stringify(window.__pairedMe||null)!==JSON.stringify(r.data);
    window.__pairedMe=r.data;
@@ -1031,6 +1032,7 @@ function studio(){
  try{pairedRefreshStudio()}catch(e){}
  let srvSeller=(typeof window!=='undefined'&&window.__pairedStudioSeller)||null;
  if(srvSeller&&pairedSignedIn())return studioServerFace(srvSeller,su);
+ if(pairedSignedIn()&&srvIsDown('studio'))return srvStudioHero('sell',su)+srvDownInner()+'</div></section>';
  let k=StudioDB.myKey();let names=studioNames(su);
  let arts=StudioDB.artworksOf(k);
  let legacy=get(STORE.listings,[]).filter(function(l){return !StudioDB.artworkById(l.id)});
@@ -1128,6 +1130,7 @@ function studioBuy(){
  try{pairedRefreshStudio()}catch(e){}
  let srvBuyer=(typeof window!=='undefined'&&window.__pairedStudioBuyer)||null;
  if(srvBuyer&&pairedSignedIn())return studioServerBuyFace(srvBuyer,su);
+ if(pairedSignedIn()&&srvIsDown('studio'))return srvStudioHero('buy',su)+srvDownInner()+'</div></section>';
  let k=StudioDB.myKey();let names=studioNames(su);
  let saves=StudioDB.savesOf(k).slice().sort(function(a,b){return b.at-a.at});
  let sortMode=state.studioSavedSort||'Recent';
@@ -1199,6 +1202,7 @@ function studioPost(){
  StudioDB.adoptPersona(su.username);
  try{pairedRefreshStudio()}catch(e){}
  if(pairedSignedIn()&&(typeof window!=='undefined'&&window.__pairedStudioSeller))return studioServerPost(su);
+ if(pairedSignedIn()&&srvIsDown('studio'))return srvStudioHero('post',su)+srvDownInner()+'</div></section>';
  let dr=studioDraftGet()||{step:1};
  let step=dr.step||1;
  let body='';
@@ -1326,6 +1330,7 @@ function briefCard(b,inWorld){let n=briefPitches(b);let sm=strongMatches(b);let 
 function board(){try{pairedRefreshBriefs()}catch(e){}
  let srvBriefs=(typeof window!=='undefined'&&window.__pairedBriefs)||null;
  if(srvBriefs&&srvBriefs.length)return boardServer();
+ if(pairedSignedIn()&&srvIsDown('briefs'))return srvDownPage('THE LIVE WALL.');
  let cat=state.boardCategory||'All categories';let briefs=allBriefs().filter(b=>cat==='All categories'||b.category===cat);let acct=get(STORE.signup,{});let poster=acct.username?acct.username:'Guest collector';let cards=briefs.map(b=>briefCard(b)).join('');return `<div class="page-hero grotto-hero"><div class="shell"><div class="eyebrow">The Commission Board</div><h1 class="page-title">ASK FOR THE <span class="paint">IMPOSSIBLE.</span></h1><p class="sub">Dreaming of a piece that does not exist yet? Post the brief. Artists read the wall, pick the dreams they love, and pitch you right here — the conversation becomes the commission.</p><div class="actions"><button class="primary" data-action="scrollto" data-target="post-brief">POST A BRIEF ↗</button><a class="outline" href="#/artists" style="text-decoration:none;display:inline-flex;align-items:center">MEET THE ARTISTS →</a></div></div></div><section class="section"><div class="shell"><div class="section-top"><div><div class="eyebrow">Open briefs</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">THE <span class="paint">WALL.</span></h2></div><p class="meta" style="max-width:340px">Example briefs show how the board works — real collector briefs open with the Founding 100 at launch. Briefs you post appear here on this browser.</p></div><div class="pills">${['All categories',...CATEGORIES].map(c=>`<button class="pill ${c===cat?'active':''}" data-action="board-cat" data-cat="${safe(c)}" style="--pill-hue:${catHue(c)}"${c===cat&&PRISM_CATS.indexOf(c)>=0?' data-prism="1"':''}>${safe(c)}</button>`).join('')}</div>${yourBoardStrip()}${briefs.length?`<div class="brief-grid">${cards}</div>`:'<div class="empty">No briefs in this category yet. Yours could be the first — post it below.</div>'}</div></section><section class="section alt" id="post-brief"><div class="shell two-col"><div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">POST A <span class="paint">BRIEF.</span></h2><p class="sub" style="margin-bottom:16px">Tell the wall what you are dreaming of. Keep contact details out of the brief — conversations stay here, where they are protected.</p><div class="panel"><form id="briefForm" class="form-grid"><div class="form-group full"><label for="bfTitle">SUBJECT — WHAT DO YOU WANT MADE? *</label><input id="bfTitle" class="field" name="title" placeholder="e.g. A portrait of my grandmother's garden — or an emote pack for your stream" required maxlength="110"></div><div class="form-group full"><label>BRIEF TYPE *</label><div class="brief-types"><label class="type-card"><input type="radio" name="briefType" value="standard" checked> <b>STANDARD</b><span>Full brief — details, timeline, revisions agreed in the thread.</span></label><label class="type-card"><input type="radio" name="briefType" value="surprise"> <b>SURPRISE ME</b><span>Fixed price · no revisions · the artist has creative freedom (Skeb-style).</span></label></div></div><div class="form-group full"><label>GAMING-NATIVE? START FROM A SHAPE</label><div class="pills" style="margin:0">${['Emote pack','Stream overlay','Avatar / VTuber art','OC / character'].map(g=>`<button type="button" class="pill" data-action="brief-idea" data-idea="${g}">${g}</button>`).join('')}</div><p class="form-note">Tap a shape to pre-fill your brief — emote packs, stream overlays, avatar / VTuber art and OC / character commissions are royalty here.</p></div><div class="form-group"><label for="bfCategory">CATEGORY *</label><select id="bfCategory" class="field" name="category">${CATEGORIES.map(c=>`<option>${c}</option>`).join('')}</select></div><div class="form-group"><label for="bfBand">BUDGET BAND *</label><select id="bfBand" class="field" name="budgetBand">${BUDGET_BANDS.map(function(b){return '<option value="'+b.label+'">'+b.label+'</option>'}).join('')}</select></div><div class="form-group"><label for="bfSize">SIZE IN MIND *</label><input id="bfSize" class="field" name="size" placeholder="e.g. 24 × 36 in — or 'a hallway wall'" required maxlength="60"></div><div class="form-group"><label for="bfTimeline">TIMELINE *</label><select id="bfTimeline" class="field" name="timeline"><option>This week</option><option>Within a month</option><option>1–3 months</option><option>No rush — when it is right</option></select></div><div class="form-group"><label for="bfDeadline">DEADLINE DATE (OPTIONAL)</label><input id="bfDeadline" class="field" name="deadline" type="date"></div><div class="form-group full"><label for="bfDetails">THE DETAILS *</label><textarea id="bfDetails" class="field" name="details" placeholder="Size, colors, the story behind it — anything that helps an artist picture your piece." required maxlength="700"></textarea></div><div class="full"><button class="primary" type="submit">POST MY BRIEF ✦</button><p id="briefMsg" style="margin-top:10px;line-height:1.6" role="alert"></p><p class="form-note">Posting as <b style="color:#fff">${safe(poster)}</b>${acct.username?'':' — sign up on the Sell page to post under your own name'}. Your brief passes the same safety check as every bio: no contact info, no rough language.</p></div></form></div></div><aside><div class="steps" style="display:block"><div class="step"><span class="number">01</span><h3>POST THE DREAM</h3><p>Name the piece, the budget, and the moment it is for. Honest briefs get honest pitches.</p></div><div class="step" style="margin-top:14px"><span class="number">02</span><h3>ARTISTS PITCH YOU</h3><p>Artists who love your brief open a thread with their idea, their price, and their timeline.</p></div><div class="step" style="margin-top:14px"><span class="number">03</span><h3>TALK. AGREE. COMMISSION.</h3><p>The thread holds the whole story — idea, agreement, progress, delivery. The conversation is the commission.</p></div></div></aside></div></section>`}
 function login(){if(PairedAuth.provider()==='clerk')return clerkLoginPage();return loginLocalPage()}
 function loginLocalPage(){let known=get(STORE.known,null);let active=get(STORE.signup,{});let acctList=accountRows(active.username||'');return `<div class="page-hero" style="--ph:#8B7CFF"><div class="shell"><div class="eyebrow">Welcome back</div><h1 class="page-title">STEP BACK <span class="paint">IN.</span></h1><p class="sub">Your stage is right where you left it.</p></div></div><section class="section"><div class="shell"><div class="panel" style="max-width:560px;margin:auto"><h2 class="section-title" style="font-size:30px">LOG <span class="paint">IN.</span></h2><p class="sub" style="margin:10px 0 16px">${known?`An account lives on this device: <b style="color:#fff">@${safe(known.username||'')}</b> — type your email and username to step back in.`:`Type the email and username you signed up with, and step back in.`}</p>${acctList}<form id="loginForm" class="form-grid"><div class="form-group full"><label for="liEmail">EMAIL ADDRESS *</label><input id="liEmail" class="field" name="email" type="email" placeholder="you@example.com" required></div><div class="form-group full"><label for="liUsername">USERNAME *</label><input id="liUsername" class="field" name="username" placeholder="your.username" required></div><div class="full"><button class="primary" type="submit" style="width:100%">LOG IN ✦</button><p id="loginMsg" style="margin-top:10px;line-height:1.6" role="alert"></p><p class="form-note">New to PAIRED? <a class="text-link" href="#/sell">Create your account</a> — it takes about a minute.</p><p class="form-note" style="margin-top:8px">✦ Founding preview — PAIRED is in founding preview, and full accounts open at launch. Until then, this door opens the house exactly as it stands: honestly, and early.</p></div></form></div></div></section>`}
@@ -1962,7 +1967,7 @@ function verifyPage(){
  let p=StudioDB.proofFor(pk);
  let st=StudioDB.instantStatus(pk);
  let head=`<div class="page-hero" style="--ph:#AFED66"><div class="shell"><div class="eyebrow">✦ Instant Membership · the Etsy fast lane</div><h1 class="page-title">YOUR SHOP IS <span class="paint">YOUR PROOF.</span></h1><p class="sub" style="max-width:680px">Working artists do not queue behind a waitlist. Prove the Etsy shop is yours, match your identity to your payout identity, and your membership activates in the same sitting — Studio open, first listing before you leave the chair.</p></div></div><section class="section" style="padding-top:34px"><div class="shell">${previewStrip()}`;
- if(pairedSignedIn()){try{pairedRefreshVerification()}catch(e){}let srvVer=(typeof window!=='undefined'&&window.__pairedVerification)||null;if(srvVer)return head+verifyServerBody(srvVer)+'</div></section>'}
+ if(pairedSignedIn()){try{pairedRefreshVerification()}catch(e){}let srvVer=(typeof window!=='undefined'&&window.__pairedVerification)||null;if(srvVer)return head+verifyServerBody(srvVer)+'</div></section>';if(srvIsDown('verify'))return head+srvDownInner()+'</div></section>'}
  let body='';
  if(st==='verified'&&p){
   body=`<div class="panel" style="border:2px solid #1d5c38"><div class="eyebrow" style="color:#7CFC9A">✦ Verified</div><h2 style="font-size:28px;margin:8px 0">INSTANT MEMBERSHIP — ACTIVE.</h2><p class="sub">The code on <b style="color:#fff">${safe(p.shopUrl)}</b> matched, and your identity leg stands as recorded: the name on this account is the name your payouts will carry. Your Studio is open, and your first listing can go up in this same sitting.</p><p class="sub" style="margin-top:10px">Two things ride along, unchanged by the fast lane: your first listing carries a provenance artifact — a process photo, a sketch-to-final pair, or a dated studio shot — and every listing carries your signed human-made declaration. The fast lane skips the queue, never the proof.</p><div class="actions" style="margin-top:14px"><a class="primary" href="#/studio" style="text-decoration:none;display:inline-flex;align-items:center">OPEN YOUR STUDIO →</a><a class="outline" href="#/studio/post" style="text-decoration:none;display:inline-flex;align-items:center;padding:13px 20px;border-radius:12px">POST YOUR FIRST PIECE →</a></div></div>`}
@@ -1981,11 +1986,15 @@ function verifyPage(){
    v80 — THE STUDIO WIRING: the SPA meets the production engine.
    Every surface below renders ONLY from engine records (window.__paired*
    caches filled by the refresh layer) and ONLY for a Clerk-signed-in
-   session the engine answered for. Signed out, API down, or cache cold,
-   every page falls back to the exact v78 render — this layer can confirm
-   and correct, never block, and it never invents a number: a figure on
-   a server face traces to an API record or the face shows an honest
-   empty state. Buy doors call the engine and report its answer as-is:
+   session the engine answered for. Signed out or cache cold, public
+   pages keep the exact v78 render; but for a SIGNED-IN session whose
+   engine call has FAILED, the operational faces (Studio, Board, Common
+   Room, Admin, Verify, piece/wall/brief pages) never fall back to demo
+   data — they show an explicit engine-unavailable state with a retry
+   (V80-02). This layer can confirm and correct, never block, and it
+   never invents a number: a figure on a server face traces to an API
+   record or the face shows an honest empty state. Buy doors call the
+   engine and report its answer as-is:
    checkout is not configured in production, so the door answers 503
    today and the SPA says exactly that — no fake checkout, ever.
    ═══════════════════════════════════════════════════════════════════ */
@@ -2002,12 +2011,22 @@ function srvFollowingSet(){let s={};try{let b=window.__pairedStudioBuyer;if(b&&b
 function srvBlockersText(b){if(!b)return '';if(Array.isArray(b))return b.join(', ');if(typeof b==='string')return b;try{return JSON.stringify(b)}catch(e){return ''}}
 function srvConditionText(c){return {listing_published:'the piece is not published',inventory_available:'the piece is no longer available',artist_verified:'the artist is not verified yet',artist_payout_path_live:'the artist’s payout path is not live yet',buyer_is_not_seller:'you cannot buy your own piece',price_above_zero:'the piece carries no price yet',no_open_dispute_freeze:'an open dispute freezes this sale',brief_open:'the brief is no longer open',pitch_pending:'the pitch is no longer pending',payment_not_settled:'the payment has not settled',delivery_evidence_missing:'delivery evidence is missing',acceptance_window_open:'the acceptance window is still open'}[c]||String(c).replace(/_/g,' ')}
 function srvRerender(){try{render()}catch(e){}}
+/* V80-02 — engine-failure registry: a key lands here when its refresh
+   resolves failed (null / non-ok) for a signed-in session, and clears
+   on the next success. Faces consult it to show the explicit
+   unavailable state instead of any demo fallback. */
+let _srvDown={};
+function srvIsDown(k){return !!_srvDown[k]}
+function srvMarkDown(k,down){let had=!!_srvDown[k];if(down)_srvDown[k]=Date.now();else delete _srvDown[k];if(had!==!!down)srvRerender()}
+function srvDownInner(){return '<div class="panel" style="border:2px solid #8a6d1d"><div class="eyebrow" style="color:#FFB03A">● Engine unavailable</div><h2 style="font-size:26px;margin:8px 0">THE ENGINE ISN’T ANSWERING.</h2><p class="sub" style="margin-bottom:14px">The engine isn’t answering — your real records are safe; this page shows them again when it responds. While you are signed in, this room never falls back to demo numbers.</p><div class="actions"><button class="primary" data-srv="retry">RETRY →</button></div></div>'}
+function srvDownPage(t){return '<div class="page-hero" style="--ph:#FFB03A"><div class="shell"><div class="eyebrow">● Engine unavailable</div><h1 class="page-title">'+t+'</h1></div></div><section class="section"><div class="shell">'+srvDownInner()+'</div></section>'}
 let _srvStudioFlight=null,_srvArtistFlight=null,_srvBriefsFlight=null,_srvRoomFlight=null,_srvAdminFlight=null,_srvVerFlight=null;
 function pairedRefreshStudio(force){
  if(!pairedSignedIn())return;
  if(_srvStudioFlight)return;
  _srvStudioFlight=Promise.all([pairedApi('/v1/studio/seller'),pairedApi('/v1/studio/buyer')]).then(function(rs){
   _srvStudioFlight=null;
+  srvMarkDown('studio',!((rs[0]&&rs[0].ok)&&(rs[1]&&rs[1].ok)));
   let changed=false;
   if(rs[0]&&rs[0].ok&&rs[0].data){if(JSON.stringify(window.__pairedStudioSeller||null)!==JSON.stringify(rs[0].data)){window.__pairedStudioSeller=rs[0].data;changed=true}}
   if(rs[1]&&rs[1].ok&&rs[1].data){if(JSON.stringify(window.__pairedStudioBuyer||null)!==JSON.stringify(rs[1].data)){window.__pairedStudioBuyer=rs[1].data;changed=true}}
@@ -2020,7 +2039,10 @@ function pairedRefreshArtist(){
  if(_srvArtistFlight)return;
  _srvArtistFlight=Promise.all([pairedApi('/v1/artist/profile'),pairedApi('/v1/artist/verification'),pairedApi('/v1/artist/connect/status')]).then(function(rs){
   _srvArtistFlight=null;
-  let next={profile:rs[0]&&rs[0].ok?rs[0].data.profile:null,verification:rs[1]&&rs[1].ok?rs[1].data:null,connect:rs[2]&&rs[2].ok?rs[2].data.connect:null};
+  let allOk=(rs[0]&&rs[0].ok)&&(rs[1]&&rs[1].ok)&&(rs[2]&&rs[2].ok);
+  srvMarkDown('artist',!allOk);
+  if(!allOk)return;
+  let next={profile:rs[0].data?rs[0].data.profile:null,verification:rs[1].data,connect:rs[2].data?rs[2].data.connect:null};
   if(JSON.stringify(window.__pairedArtist||null)!==JSON.stringify(next)){window.__pairedArtist=next;let h=location.hash||'';if(h.indexOf('#/studio')===0||h.indexOf('#/verify')===0)srvRerender()}
  });
 }
@@ -2029,6 +2051,7 @@ function pairedRefreshVerification(){
  if(_srvVerFlight)return;
  _srvVerFlight=pairedApi('/v1/artist/verification').then(function(r){
   _srvVerFlight=null;
+  srvMarkDown('verify',!(r&&r.ok));
   if(r&&r.ok&&r.data){if(JSON.stringify(window.__pairedVerification||null)!==JSON.stringify(r.data)){window.__pairedVerification=r.data;if((location.hash||'').indexOf('#/verify')===0)srvRerender()}}
  });
 }
@@ -2037,6 +2060,7 @@ function pairedRefreshBriefs(){
  if(_srvBriefsFlight)return;
  _srvBriefsFlight=pairedApi('/v1/briefs').then(function(r){
   _srvBriefsFlight=null;
+  srvMarkDown('briefs',!(r&&r.ok));
   if(r&&r.ok&&r.data){let list=r.data.briefs||[];if(JSON.stringify(window.__pairedBriefs||null)!==JSON.stringify(list)){window.__pairedBriefs=list;if((location.hash||'').indexOf('#/board')===0)srvRerender()}}
  });
 }
@@ -2046,9 +2070,10 @@ function pairedRefreshBrief(id){
  if(_srvBriefFlights[id])return;
  _srvBriefFlights[id]=pairedApi('/v1/briefs/'+id).then(function(r){
   delete _srvBriefFlights[id];
-  if(!r){return}
-  if(r.status===404){try{window.__pairedBriefMiss=window.__pairedBriefMiss||{};window.__pairedBriefMiss[id]=1;if((location.hash||'')==='#/brief/'+id)srvRerender()}catch(e){}return}
-  if(!r.ok||!r.data||!r.data.brief)return;
+  if(!r){srvMarkDown('brief:'+id,true);return}
+  if(r.status===404){srvMarkDown('brief:'+id,false);try{window.__pairedBriefMiss=window.__pairedBriefMiss||{};window.__pairedBriefMiss[id]=1;if((location.hash||'')==='#/brief/'+id)srvRerender()}catch(e){}return}
+  if(!r.ok||!r.data||!r.data.brief){srvMarkDown('brief:'+id,true);return}
+  srvMarkDown('brief:'+id,false);
   let brief=r.data.brief;
   let finish=function(pitches){let det={id:id,brief:brief,pitches:pitches};if(JSON.stringify(window.__pairedBriefDetail||null)!==JSON.stringify(det)){window.__pairedBriefDetail=det;if((location.hash||'')==='#/brief/'+id)srvRerender()}};
   if(pairedSignedIn()){pairedApi('/v1/briefs/'+id+'/pitches').then(function(pr){finish(pr&&pr.ok&&pr.data?pr.data.pitches:null)})}
@@ -2061,10 +2086,11 @@ function pairedRefreshPiece(id){
  if(_srvPieceFlights[id])return;
  _srvPieceFlights[id]=pairedApi('/v1/listings/'+id).then(function(r){
   delete _srvPieceFlights[id];
-  if(!r)return;
+  if(!r){srvMarkDown('piece:'+id,true);return}
   window.__pairedPieces=window.__pairedPieces||{};
-  if(r.status===404){window.__pairedPieceMiss=window.__pairedPieceMiss||{};window.__pairedPieceMiss[id]=1;if((location.hash||'')==='#/piece/'+id)srvRerender();return}
-  if(r.ok&&r.data){let l=r.data.listing||r.data;if(JSON.stringify(window.__pairedPieces[id]||null)!==JSON.stringify(l)){window.__pairedPieces[id]=l;if((location.hash||'')==='#/piece/'+id)srvRerender()}}
+  if(r.status===404){srvMarkDown('piece:'+id,false);window.__pairedPieceMiss=window.__pairedPieceMiss||{};window.__pairedPieceMiss[id]=1;if((location.hash||'')==='#/piece/'+id)srvRerender();return}
+  if(!r.ok){srvMarkDown('piece:'+id,true);return}
+  if(r.ok&&r.data){srvMarkDown('piece:'+id,false);let l=r.data.listing||r.data;if(JSON.stringify(window.__pairedPieces[id]||null)!==JSON.stringify(l)){window.__pairedPieces[id]=l;if((location.hash||'')==='#/piece/'+id)srvRerender()}}
  });
 }
 let _srvWallFlights={};
@@ -2073,7 +2099,9 @@ function pairedRefreshWall(acct){
  if(_srvWallFlights[acct])return;
  _srvWallFlights[acct]=pairedApi('/v1/artists/'+acct+'/listings').then(function(r){
   delete _srvWallFlights[acct];
-  if(r&&r.ok&&r.data){window.__pairedWalls=window.__pairedWalls||{};let list=r.data.listings||[];if(JSON.stringify(window.__pairedWalls[acct]||null)!==JSON.stringify(list)){window.__pairedWalls[acct]=list;if((location.hash||'')==='#/wall/'+acct)srvRerender()}}
+  if(r&&r.status===404){srvMarkDown('wall:'+acct,false);window.__pairedWallMiss=window.__pairedWallMiss||{};window.__pairedWallMiss[acct]=1;if((location.hash||'')==='#/wall/'+acct)srvRerender();return}
+  if(r&&r.ok&&r.data){srvMarkDown('wall:'+acct,false);window.__pairedWalls=window.__pairedWalls||{};let list=r.data.listings||[];if(JSON.stringify(window.__pairedWalls[acct]||null)!==JSON.stringify(list)){window.__pairedWalls[acct]=list;if((location.hash||'')==='#/wall/'+acct)srvRerender()}}
+  else srvMarkDown('wall:'+acct,true);
  });
 }
 function pairedRefreshRoom(force){
@@ -2081,7 +2109,8 @@ function pairedRefreshRoom(force){
  if(_srvRoomFlight)return;
  _srvRoomFlight=Promise.all([pairedApi('/v1/room/posts'),pairedApi('/v1/room/blocks')]).then(function(rs){
   _srvRoomFlight=null;
-  if(rs[0]&&rs[0].ok&&rs[0].data){let next={posts:rs[0].data.posts||[],blocks:rs[1]&&rs[1].ok&&rs[1].data?(rs[1].data.blocks||[]):[]};if(JSON.stringify(window.__pairedRoom||null)!==JSON.stringify(next)){window.__pairedRoom=next;let h=location.hash||'';if(h==='#/common'||h==='#/common/')srvRerender()}}
+  srvMarkDown('room',!(rs[0]&&rs[0].ok));
+  if(rs[0]&&rs[0].ok&&rs[0].data){let prev=(typeof window!=='undefined'&&window.__pairedRoom)||null;let next={posts:rs[0].data.posts||[],blocks:rs[1]&&rs[1].ok&&rs[1].data?(rs[1].data.blocks||[]):(prev?prev.blocks:[])};if(JSON.stringify(window.__pairedRoom||null)!==JSON.stringify(next)){window.__pairedRoom=next;let h=location.hash||'';if(h==='#/common'||h==='#/common/')srvRerender()}}
  });
 }
 let _srvThreadFlights={};
@@ -2090,10 +2119,11 @@ function pairedRefreshThread(id){
  if(_srvThreadFlights[id])return;
  _srvThreadFlights[id]=pairedApi('/v1/room/posts/'+id).then(function(r){
   delete _srvThreadFlights[id];
-  if(!r)return;
+  if(!r){srvMarkDown('thread:'+id,true);return}
   window.__pairedThreads=window.__pairedThreads||{};
-  if(r.status===404){window.__pairedThreadMiss=window.__pairedThreadMiss||{};window.__pairedThreadMiss[id]=1;if((location.hash||'')==='#/common/thread/'+id)srvRerender();return}
-  if(r.ok&&r.data){if(JSON.stringify(window.__pairedThreads[id]||null)!==JSON.stringify(r.data)){window.__pairedThreads[id]=r.data;if((location.hash||'')==='#/common/thread/'+id)srvRerender()}}
+  if(r.status===404){srvMarkDown('thread:'+id,false);window.__pairedThreadMiss=window.__pairedThreadMiss||{};window.__pairedThreadMiss[id]=1;if((location.hash||'')==='#/common/thread/'+id)srvRerender();return}
+  if(!r.ok){srvMarkDown('thread:'+id,true);return}
+  if(r.ok&&r.data){srvMarkDown('thread:'+id,false);if(JSON.stringify(window.__pairedThreads[id]||null)!==JSON.stringify(r.data)){window.__pairedThreads[id]=r.data;if((location.hash||'')==='#/common/thread/'+id)srvRerender()}}
  });
 }
 function pairedRefreshAdmin(){
@@ -2101,7 +2131,13 @@ function pairedRefreshAdmin(){
  if(_srvAdminFlight)return;
  _srvAdminFlight=Promise.all([pairedApi('/v1/admin/verifications/queue'),pairedApi('/v1/admin/founding/applications'),pairedApi('/v1/admin/reports'),pairedApi('/v1/admin/exceptions'),pairedApi('/v1/admin/orders')]).then(function(rs){
   _srvAdminFlight=null;
-  let next={verifications:rs[0]&&rs[0].ok?rs[0].data.queue:[],founding:rs[1]&&rs[1].ok?rs[1].data:null,reports:rs[2]&&rs[2].ok?rs[2].data.reports:[],exceptions:rs[3]&&rs[3].ok?rs[3].data.exceptions:[],orders:rs[4]&&rs[4].ok?rs[4].data.orders:[]};
+  /* V80-02: a failed leg must never be cached as an empty queue — the
+     console either renders the full engine answer or the unavailable
+     state; the previous cache, when one exists, stays untouched. */
+  let allOk=rs.every(function(r){return !!(r&&r.ok)});
+  srvMarkDown('admin',!allOk);
+  if(!allOk)return;
+  let next={verifications:rs[0].data?rs[0].data.queue:[],founding:rs[1].data,reports:rs[2].data?rs[2].data.reports:[],exceptions:rs[3].data?rs[3].data.exceptions:[],orders:rs[4].data?rs[4].data.orders:[]};
   if(JSON.stringify(window.__pairedAdmin||null)!==JSON.stringify(next)){window.__pairedAdmin=next;if((location.hash||'').indexOf('#/admin')===0)srvRerender()}
  });
 }
@@ -2155,7 +2191,7 @@ function srvPieceRow(l){
 }
 function srvArtistPanels(){
  let A=(typeof window!=='undefined'&&window.__pairedArtist)||null;
- if(!A)return '<div class="panel studio-panel"><p class="sub">Reading your artist record from the engine…</p></div>';
+ if(!A)return srvIsDown('artist')?'<div class="panel studio-panel"><div class="eyebrow" style="color:#FFB03A">● Engine unavailable</div><p class="sub" style="margin-top:8px">The engine isn’t answering — your artist record (profile, verification, payout path) is safe on the server; this panel shows it again when the engine responds.</p><div class="actions" style="margin-top:12px"><button class="primary" data-srv="retry">RETRY →</button></div></div>':'<div class="panel studio-panel"><p class="sub">Reading your artist record from the engine…</p></div>';
  let prof=A.profile||null;
  let ver=A.verification||null;
  let verified=!!(prof&&prof.verified)||!!(ver&&ver.verified);
@@ -2233,7 +2269,7 @@ function studioServerEditPage(id){
  try{let d=window.__pairedStudioSeller;if(d&&d.listings)l=d.listings.find(function(x){return x.id===id})||null}catch(e){}
  if(!l){try{pairedRefreshStudio()}catch(e){}
   try{let pc=(window.__pairedPieces||{})[id];if(pc&&srvMeId()===pc.accountId)l=pc}catch(e){}
-  if(!l)return srvStudioHero('sell',get(STORE.signup,null))+'<div class="panel"><p class="sub">Reading this piece from the engine… if it is yours, the edit form lands here in a moment.</p></div></div></section>'}
+  if(!l)return srvStudioHero('sell',get(STORE.signup,null))+(srvIsDown('studio')?srvDownInner():'<div class="panel"><p class="sub">Reading this piece from the engine… if it is yours, the edit form lands here in a moment.</p></div>')+'</div></section>'}
  return srvStudioHero('sell',get(STORE.signup,null))+`<div class="panel"><h2 style="font-size:26px;margin-bottom:6px">EDIT — ${safe(l.title)}</h2><p class="sub" style="margin-bottom:16px">Changes save to the engine record. Publishing asks the engine's guards: a title and a price above zero.</p>
 <form id="srvEditForm" class="form-grid" data-lid="${l.id}">
 <div class="form-group"><label for="seTitle">TITLE *</label><input id="seTitle" class="field" name="title" maxlength="200" required value="${safe(l.title)}"></div>
@@ -2250,7 +2286,7 @@ function piecePage(id){
  try{pairedRefreshStudio()}catch(e){}
  if(typeof window!=='undefined'&&window.__pairedPieceMiss&&window.__pairedPieceMiss[id])return notFound();
  let l=(typeof window!=='undefined'&&window.__pairedPieces&&window.__pairedPieces[id])||null;
- if(!l)return '<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading this piece from the engine…</p></div></div></section>';
+ if(!l)return srvIsDown('piece:'+id)?srvDownPage('THIS PIECE.'):'<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading this piece from the engine…</p></div></div></section>';
  let mine=srvMeId()&&srvMeId()===l.accountId;
  let following=srvFollowingSet()[l.accountId]?1:0;
  let saved=srvSavedSet()[l.id]?1:0;
@@ -2268,7 +2304,8 @@ function wallPage(acct){
  let list=(typeof window!=='undefined'&&window.__pairedWalls&&window.__pairedWalls[acct])||null;
  let following=srvFollowingSet()[acct]?1:0;
  let head='<div class="page-hero" style="--ph:#39D0C4"><div class="shell"><div class="eyebrow">One artist · the engine wall</div><h1 class="page-title">ONE ARTIST’S <span class="paint">WALL.</span></h1><p class="sub">Every published piece from this artist, served live from the production engine.</p><div class="actions" style="margin-top:14px"><button class="primary" data-srv="follow" data-acct="'+acct+'">'+(following?'♥ FOLLOWING':'+ FOLLOW THIS ARTIST')+'</button></div></div></div>';
- if(!list)return head+'<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading the wall from the engine…</p></div></div></section>';
+ if(typeof window!=='undefined'&&window.__pairedWallMiss&&window.__pairedWallMiss[acct])return notFound();
+ if(!list)return head+'<section class="section"><div class="shell">'+(srvIsDown('wall:'+acct)?srvDownInner():'<div class="panel"><p class="sub">Reading the wall from the engine…</p></div>')+'</div></section>';
  return head+'<section class="section"><div class="shell">'+(list.length?'<div class="art-grid">'+list.map(srvCard).join('')+'</div>':'<div class="empty">This artist has no published pieces on the wall right now.</div>')+'</div></section>';
 }
 function srvBriefCard(b){
@@ -2286,7 +2323,7 @@ function briefPage(id){
  try{pairedRefreshBrief(id)}catch(e){}
  if(typeof window!=='undefined'&&window.__pairedBriefMiss&&window.__pairedBriefMiss[id])return notFound();
  let det=(typeof window!=='undefined'&&window.__pairedBriefDetail)||null;
- if(!det||det.id!==id)return '<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading this brief from the engine…</p></div></div></section>';
+ if(!det||det.id!==id)return srvIsDown('brief:'+id)?srvDownPage('THIS BRIEF.'):'<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading this brief from the engine…</p></div></div></section>';
  let b=det.brief;
  let meId=srvMeId();
  let mine=!!(meId&&meId===b.buyerAccountId);
@@ -2316,6 +2353,7 @@ function roomGatherings(){
 }
 function roomLive(){
  let room=(typeof window!=='undefined'&&window.__pairedRoom)||null;
+ if(!room&&srvIsDown('room'))return srvDownPage('THE COMMON ROOM.');
  let posts=room?room.posts:null;
  let blocks=room?room.blocks:[];
  let feed=posts===null?'<div class="panel"><p class="sub">Reading the room from the engine…</p></div>':(posts.length?posts.map(function(p){return srvPostCard(p,false)}).join(''):'<div class="empty">The room is open and quiet — no posts yet. The first one is yours.</div>');
@@ -2333,20 +2371,20 @@ function roomThreadPage(id){
  try{pairedRefreshThread(id)}catch(e){}
  if(typeof window!=='undefined'&&window.__pairedThreadMiss&&window.__pairedThreadMiss[id])return notFound();
  let t=(typeof window!=='undefined'&&window.__pairedThreads&&window.__pairedThreads[id])||null;
- if(!t)return '<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading this thread from the engine…</p></div></div></section>';
+ if(!t)return srvIsDown('thread:'+id)?srvDownPage('THIS THREAD.'):'<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading this thread from the engine…</p></div></div></section>';
  return '<section class="section"><div class="shell" style="max-width:920px"><div class="actions" style="margin-bottom:16px"><a class="outline" href="#/common" style="text-decoration:none;display:inline-flex;align-items:center">← BACK TO THE ROOM</a></div>'+srvPostCard(t.post,false)+'<h3 style="margin:26px 0 14px">REPLIES</h3><div style="display:grid;gap:14px">'+(t.replies&&t.replies.length?t.replies.map(function(r){return srvPostCard(r,true)}).join(''):'<div class="empty">No replies yet — the room answers work with work. Be the first.</div>')+'</div><div class="panel" style="margin-top:22px"><h3 style="margin-bottom:8px">ANSWER THE ROOM</h3><form id="srvReplyForm" class="form-grid" data-post="'+id+'"><div class="form-group full"><textarea class="field" name="body" maxlength="2000" required placeholder="Your reply — a sketch, a demo, a price, a story."></textarea></div><div class="full"><button class="primary" type="submit">REPLY ✦</button><p id="srvReplyMsg" style="margin-top:10px;line-height:1.6" role="alert"></p></div></form></div></div></section>';
 }
 function adminPage(){
  if(!pairedSignedIn())return '<section class="section"><div class="shell"><div class="panel"><h2 style="font-size:26px;margin-bottom:8px">THE PAIRED DESK.</h2><p class="sub">Sign in with an account that carries the admin role.</p><div class="actions" style="margin-top:14px"><a class="primary" href="#/login" style="text-decoration:none">LOG IN ✦</a></div></div></div></section>';
  try{pairedRefreshMe()}catch(e){}
  if(!srvIsAdmin()){
-  if(!(typeof window!=='undefined'&&window.__pairedMe))return '<section class="section"><div class="shell"><div class="panel"><p class="sub">Checking your role with the engine…</p></div></div></section>';
+  if(!(typeof window!=='undefined'&&window.__pairedMe))return srvIsDown('me')?'<section class="section"><div class="shell">'+srvDownInner()+'</div></section>':'<section class="section"><div class="shell"><div class="panel"><p class="sub">Checking your role with the engine…</p></div></div></section>';
   return '<section class="section"><div class="shell"><div class="panel"><h2 style="font-size:26px;margin-bottom:8px">NOT YOUR DOOR.</h2><p class="sub">This console belongs to the PAIRED desk — your account does not carry the admin role on the engine record.</p></div></div></section>';
  }
  try{pairedRefreshAdmin()}catch(e){}
  let A=(typeof window!=='undefined'&&window.__pairedAdmin)||null;
  let head='<div class="page-hero" style="--ph:#8B7CFF"><div class="shell"><div class="eyebrow">The PAIRED desk · ops console</div><h1 class="page-title">ADMIN.</h1><p class="sub">Plain on purpose: queues from the engine, decisions with reasons. Every reason below IS the audit record — no decision lands without one.</p></div></div>';
- if(!A)return head+'<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading the queues from the engine…</p></div></div></section>';
+ if(!A)return head+'<section class="section"><div class="shell">'+(srvIsDown('admin')?srvDownInner():'<div class="panel"><p class="sub">Reading the queues from the engine…</p></div>')+'</div></section>';
  let vRows=A.verifications.length?A.verifications.map(function(v){return '<div class="list-row"><div class="list-info"><strong>'+safe(v.displayName||v.email||'An artist')+'</strong><small>'+safe(v.email||'')+' · '+safe(v.state)+' · submitted '+srvDate(v.submittedAt)+'</small><p class="track-line">Shop: '+safe(v.shopUrl)+'</p></div><span class="srv-inline"><select class="field" id="srvVState-'+v.id+'"><option value="under_review">UNDER REVIEW</option><option value="verified">VERIFIED</option><option value="rejected">REJECTED</option></select><input class="field" id="srvVNotes-'+v.id+'" placeholder="Decision notes — required" maxlength="500"><button class="mini-btn" data-srv="admin-vdecide" data-vid="'+v.id+'">DECIDE</button></span></div>'}).join(''):'<div class="empty">The verification queue is empty — no open proofs.</div>';
  let f=A.founding;
  let fRows=f&&f.applications.length?f.applications.map(function(a){return '<div class="list-row"><div class="list-info"><strong>'+safe(a.displayName||a.email||'An applicant')+'</strong><small>'+safe(a.email||'')+' · '+safe(a.status)+(a.seatNo?' · seat #'+a.seatNo:'')+' · applied '+srvDate(a.createdAt)+'</small>'+(a.note?'<p class="track-line">'+safe(a.note)+'</p>':'')+'</div>'+(a.status==='pending'?'<span class="srv-inline"><input class="field" id="srvFReason-'+a.id+'" placeholder="Reason — required" maxlength="500"><button class="mini-btn" data-srv="admin-fdecide" data-fid="'+a.id+'" data-decision="approved">APPROVE</button><button class="mini-btn" data-srv="admin-fdecide" data-fid="'+a.id+'" data-decision="rejected">REJECT</button></span>':'<span class="badge">'+safe(a.status.toUpperCase())+'</span>')+'</div>'}).join(''):'<div class="empty">No founding applications on the record.</div>';
@@ -2525,6 +2563,7 @@ function srvAdminOrder(oid,kind){
 function srvAction(btn){
  let a=btn.dataset.srv;
  if(a==='resend-2fa'){PairedAuth.signInResendSecondFactor().then(function(){toast('A fresh code is on its way ✦')}).catch(function(e){toast(e.message||'The resend did not land.')});return}
+ if(a==='retry'){_srvDown={};try{pairedRefreshMe(true)}catch(e){}try{pairedRefreshStudio(true)}catch(e){}try{pairedRefreshArtist()}catch(e){}try{pairedRefreshVerification()}catch(e){}try{pairedRefreshBriefs()}catch(e){}try{pairedRefreshRoom(true)}catch(e){}try{pairedRefreshAdmin()}catch(e){}let hp=(location.hash||'').split('/');if(hp[1]==='piece')try{pairedRefreshPiece(hp[2])}catch(e){}if(hp[1]==='wall')try{pairedRefreshWall(hp[2])}catch(e){}if(hp[1]==='brief')try{pairedRefreshBrief(hp[2])}catch(e){}if(hp[1]==='common'&&hp[2]==='thread')try{pairedRefreshThread(hp[3])}catch(e){}srvRerender();return}
  if(a==='view'){let lid=btn.dataset.lid;if(lid&&pairedSignedIn()){try{pairedApi('/v1/listings/'+lid+'/view',{method:'POST',timeoutMs:8000}).then(function(){})}catch(e){}}return}
  if(a==='buy')return srvBuy(btn.dataset.lid);
  if(a==='save')return srvSaveToggle(btn.dataset.lid);
