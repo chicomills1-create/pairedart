@@ -906,18 +906,35 @@ function pairedSignedIn(){try{let C=(typeof window!=='undefined'&&window.Clerk)|
 async function pairedApi(path,opts){
  opts=opts||{};
  if(typeof fetch!=='function')return null;
- try{
-  let headers={'Content-Type':'application/json'};
-  try{let C=(typeof window!=='undefined'&&window.Clerk)||null;
-   if(C&&C.session&&typeof C.session.getToken==='function'){let tok=await C.session.getToken();if(tok)headers['Authorization']='Bearer '+tok}
-  }catch(e){}
-  let ctl=(typeof AbortController!=='undefined')?new AbortController():null;
-  let timer=ctl?setTimeout(function(){try{ctl.abort()}catch(e){}},opts.timeoutMs||5000):null;
-  let res=await fetch(PAIRED_API+path,{method:opts.method||'GET',headers:headers,body:opts.body!=null?JSON.stringify(opts.body):undefined,signal:ctl?ctl.signal:undefined});
-  if(timer)clearTimeout(timer);
-  let data=null;try{data=await res.json()}catch(e){}
-  return{status:res.status,ok:res.ok,data:data};
- }catch(e){return null}
+ /* M7-D4: GETs are reads — when the engine is cold (first load after it
+    sleeps), a failed attempt retries with backoff instead of surfacing
+    a dead surface. Writes are NEVER auto-retried: a retried POST could
+    double-apply, so they keep the single-attempt contract. A retry runs
+    only when an attempt fails outright (the null path below); an HTTP
+    answer, even an error status, is an answer and returns at once. */
+ let isGet=!opts.method||String(opts.method).toUpperCase()==='GET';
+ let delays=[2000,5000,10000];
+ for(let attempt=0;;attempt++){
+  try{
+   let headers={};
+   /* M7-D1: the JSON content type is claimed only when a body is
+      actually sent — the engine rightly rejects an empty body riding
+      under a JSON content type, which broke every bodyless action. */
+   if(opts.body!=null)headers['Content-Type']='application/json';
+   try{let C=(typeof window!=='undefined'&&window.Clerk)||null;
+    if(C&&C.session&&typeof C.session.getToken==='function'){let tok=await C.session.getToken();if(tok)headers['Authorization']='Bearer '+tok}
+   }catch(e){}
+   let ctl=(typeof AbortController!=='undefined')?new AbortController():null;
+   let timer=ctl?setTimeout(function(){try{ctl.abort()}catch(e){}},opts.timeoutMs||5000):null;
+   let res=await fetch(PAIRED_API+path,{method:opts.method||'GET',headers:headers,body:opts.body!=null?JSON.stringify(opts.body):undefined,signal:ctl?ctl.signal:undefined});
+   if(timer)clearTimeout(timer);
+   let data=null;try{data=await res.json()}catch(e){}
+   return{status:res.status,ok:res.ok,data:data};
+  }catch(e){
+   if(!isGet||attempt>=delays.length)return null;
+   await new Promise(function(resolve){setTimeout(resolve,delays[attempt])});
+  }
+ }
 }
 function pairedRefreshMe(force){
  if(!pairedSignedIn())return;
@@ -1475,6 +1492,22 @@ function spotlight(){
 <section class="section alt"><div class="shell"><div class="section-top"><div><div class="eyebrow">The work on stage</div><h2 class="section-title">BY ${safe(name.split(' ')[0].toUpperCase())}’S <span class="paint">HAND.</span></h2></div><a class="text-link" href="#/artist/${safe(handle)}">THE FULL STUDIO →</a></div><div class="art-grid">${pieces.map(artCard).join('')}</div></div></section>
 ${props.length?`<section class="section"><div class="shell"><div class="section-top"><div><div class="eyebrow">In the pipeline</div><h2 class="section-title">COMMISSIONS <span class="paint">IN MOTION.</span></h2></div></div>${props.map(p=>`<div class="panel" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:12px"><div style="flex:1;min-width:220px"><b style="color:#fff">${safe(p.briefTitle)}</b><p class="meta">Proposal in the thread with ${safe(p.contact)} · stage ${safe(p.stage)}</p></div><span class="badge">${safe(p.status)}</span><a class="outline" href="#/messages" style="text-decoration:none;display:inline-flex;align-items:center;padding:11px 16px;border-radius:12px">OPEN THE THREAD →</a></div>`).join('')}</div></section>`:''}
 <section class="section"><div class="shell"><div class="section-top"><div><div class="eyebrow">How the stage turns</div><h2 class="section-title">THE <span class="paint">ROTATION.</span></h2></div></div><div class="panel" style="margin-bottom:22px"><p style="line-height:1.8;max-width:760px">Every week, the stage passes to the next artist in the rotation — the same rotation that lights the home strip and the Fresh Today rail, computed from one list, so every surface always agrees. Nobody buys the stage and nobody is placed on it by hand. The artists below held it in the weeks before this one — each name computed by that same rotation, each one a door to their studio.</p></div><div class="spot-past">${past}</div><p class="meta" style="margin-top:14px">Preview rotation: these are the demo catalog’s artists, shown so the Founding 100 can see exactly how the stage will turn. At launch the rotation runs on real studios.</p></div></section>`}
+/* M7-D2: the founding panel must not depend on this browser holding a
+   local copy of the application. A signed-in artist whose application
+   lives only on the engine gets the panel from the SERVER record —
+   rendered from exactly what that record carries (its status, and the
+   cohort seat count), never invented name/category/date detail. */
+function foundingServerPanel(){
+ try{
+  if(!pairedSignedIn())return '';
+  try{if(srvIsDown('founding'))return ''}catch(e){}
+  let f=(typeof window!=='undefined'&&window.__pairedFounding)||null;
+  if(!f||['pending','approved','rejected'].indexOf(f.status)<0)return '';
+  let heads={pending:'YOUR APPLICATION IS IN — UNDER REVIEW.',approved:'YOUR FOUNDING SEAT IS CONFIRMED.',rejected:'YOUR APPLICATION WAS REVIEWED.'};
+  let meta='Your application is held on your account record by the PAIRED engine — it shows on any device you sign in on.'+(typeof f.seatsClaimed==='number'?' The cohort record stands at '+f.seatsClaimed+' of 100 seats claimed.':'');
+  return '<div class="panel" style="margin-bottom:22px">'+foundingAppsHeading()+'<div style="padding:12px 0"><span class="badge" style="background:#123f2a;color:#b8ffd2">'+foundingBadgeText()+'</span><h3 style="margin:10px 0 4px">'+heads[f.status]+'</h3><p class="meta">'+meta+'</p></div></div>';
+ }catch(e){return ''}
+}
 function founding100(){
  try{pairedRefreshFounding()}catch(e){}
  let apps=foundingApps(),claimed=foundingSeatsClaimed(),pct=Math.min(100,Math.round(claimed/100*100));
@@ -1491,7 +1524,7 @@ function founding100(){
 <aside class="panel f100-econ"><div class="eyebrow">Founder economics</div><h3 style="margin-bottom:8px">WHY JOIN NOW — THE MATH, PLAIN.</h3><p class="sub" style="margin-bottom:10px">On a $200 sale, after platform fee:</p><div style="font-size:15px;line-height:2">Solo (free): keep <b>$${TIER_DATA[0].keep200}</b><br>Paired: keep <b>$${TIER_DATA[1].keep200}</b><br>Ensemble: keep <b>$${TIER_DATA[2].keep200}</b></div><p style="line-height:1.8;margin-top:12px">The founding lock: (${TIER_DATA[1].price} − $${FOUNDING_PRICE.toFixed(2)}) × ${FOUNDING_MONTHS} months = <b style="color:#fff">${money(FOUNDING_LOCK_SAVE)} saved</b> against standard Paired — before you sell a single piece. Add ${FOUNDING_FREE_DAYS} free days up front, and a badge no later artist can ever hold.</p><p class="form-note">Every keep figure is after platform fee — processing shown at checkout, no surprises, ever.</p></aside></div></section>
 <section class="section alt"><div class="shell"><div class="section-top"><div><div class="eyebrow">The founding mix</div><h2 class="section-title">THE MIX WE’RE <span class="paint">BUILDING TOWARD.</span></h2><p class="sub">Targets, not results — a founding class with range. The counts move only when real applications land; nothing here is a claim about who has joined.</p></div></div><div class="mix-lanes">${lanes.map(l=>`<div class="panel mix-lane"><div class="f100-lane-num">${l.target}</div><h3>${l.label}</h3><p class="sub" style="min-height:66px">${l.blurb}</p><div class="lane-bar"><div class="lane-fill" style="width:${Math.min(100,l.count/l.target*100)}%"></div></div><p class="meta" style="margin-top:8px">${l.count} applied on this device · target ${l.target}</p></div>`).join('')}</div>${otherCount?`<p class="meta" style="margin-top:14px">Plus ${otherCount} application${otherCount===1?'':'s'} across every other craft — the whole menagerie belongs in this house.</p>`:''}</div></section>
 <section class="section"><div class="shell"><div class="section-top"><div><div class="eyebrow">Featured artwork · commission availability</div><h2 class="section-title">PREVIEW ART — <span class="paint">THE DEMO STABLE.</span></h2><p class="sub">These artists carry the prototype so you can feel the place: real slots, real share links, example work. They are <b style="color:#fff">not founders</b> — no demo artist holds a seat. When the founding class lands, this wall is theirs.</p></div></div><div class="art-grid">${stable.map(x=>`<div class="panel f100-artist">${artCard(x.piece)}<h3 style="margin-top:14px">${safe(x.name)}</h3><p class="meta" style="color:var(--cyan);font-weight:700">@${x.handle}</p>${slotsChip(x.name)?'<div style="margin:9px 0">'+slotsChip(x.name)+'</div>':''}<span class="badge" style="background:#39284b;color:#e9daf5">PREVIEW ARTIST — NOT A FOUNDER</span><div class="actions" style="margin-top:12px"><a class="outline" href="#/artist/${x.handle}" style="text-decoration:none;display:inline-flex;align-items:center">VIEW ARTIST →</a><button class="outline" data-action="copy-link" data-link="pairedart.com/#/artist/${x.handle}">COPY LINK ↗</button></div></div>`).join('')}</div></div></section>
-<section class="section alt" id="foundingApply"><div class="shell"><div class="section-top"><div><div class="eyebrow">Application intake</div><h2 class="section-title">CLAIM YOUR <span class="paint">SEAT.</span></h2>${foundingApplySub()}</div></div>${apps.length?`<div class="panel" style="margin-bottom:22px">${foundingAppsHeading()}${apps.map(a=>`<div style="padding:12px 0;border-bottom:1px dashed #43364f"><span class="badge" style="background:#123f2a;color:#b8ffd2">${foundingBadgeText()}</span><h3 style="margin:10px 0 4px">${safe(a.name)}</h3><p class="meta">${safe(a.category)} · ${safe(a.commissions)} · applied ${new Date(a.at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</p></div>`).join('')}</div>`:''}<div class="panel"><form id="foundingForm" class="form-grid"><div class="form-group"><label for="ffName">ARTIST NAME / USERNAME *</label><input id="ffName" class="field" name="name" placeholder="e.g. rainbow.rebel_ink" required maxlength="70"></div><div class="form-group"><label for="ffEmail">EMAIL ADDRESS *</label><input id="ffEmail" class="field" name="email" type="email" placeholder="you@example.com" required maxlength="120"></div><div class="form-group"><label for="ffCategory">PRIMARY CATEGORY *</label><select id="ffCategory" class="field" name="category">${CATEGORIES.map(c=>`<option>${c}</option>`).join('')}</select></div><div class="form-group"><label for="ffCommissions">COMMISSIONS *</label><select id="ffCommissions" class="field" name="commissions"><option>Yes — commissions open</option><option>Not yet — listings first</option></select></div><div class="form-group full"><label for="ffWork">SHOW ME YOUR WORK *</label><textarea id="ffWork" name="work" placeholder="Paste a portfolio link, or tell us in a few lines what you make — your medium, your subjects, the work you are proudest of." required maxlength="900"></textarea></div><div class="form-group full"><label for="ffWhy">WHY PAIRED, WHY NOW? — ONE LINE</label><input id="ffWhy" class="field" name="why" placeholder="One honest line is plenty." maxlength="220"></div><div class="full"><button class="primary" type="submit">APPLY FOR THE FOUNDING 100 ✦</button><p id="foundingMsg" style="margin-top:10px;line-height:1.6" role="alert"></p>${foundingFormNote()}</div></form></div></div></section>
+<section class="section alt" id="foundingApply"><div class="shell"><div class="section-top"><div><div class="eyebrow">Application intake</div><h2 class="section-title">CLAIM YOUR <span class="paint">SEAT.</span></h2>${foundingApplySub()}</div></div>${apps.length?`<div class="panel" style="margin-bottom:22px">${foundingAppsHeading()}${apps.map(a=>`<div style="padding:12px 0;border-bottom:1px dashed #43364f"><span class="badge" style="background:#123f2a;color:#b8ffd2">${foundingBadgeText()}</span><h3 style="margin:10px 0 4px">${safe(a.name)}</h3><p class="meta">${safe(a.category)} · ${safe(a.commissions)} · applied ${new Date(a.at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</p></div>`).join('')}</div>`:foundingServerPanel()}<div class="panel"><form id="foundingForm" class="form-grid"><div class="form-group"><label for="ffName">ARTIST NAME / USERNAME *</label><input id="ffName" class="field" name="name" placeholder="e.g. rainbow.rebel_ink" required maxlength="70"></div><div class="form-group"><label for="ffEmail">EMAIL ADDRESS *</label><input id="ffEmail" class="field" name="email" type="email" placeholder="you@example.com" required maxlength="120"></div><div class="form-group"><label for="ffCategory">PRIMARY CATEGORY *</label><select id="ffCategory" class="field" name="category">${CATEGORIES.map(c=>`<option>${c}</option>`).join('')}</select></div><div class="form-group"><label for="ffCommissions">COMMISSIONS *</label><select id="ffCommissions" class="field" name="commissions"><option>Yes — commissions open</option><option>Not yet — listings first</option></select></div><div class="form-group full"><label for="ffWork">SHOW ME YOUR WORK *</label><textarea id="ffWork" name="work" placeholder="Paste a portfolio link, or tell us in a few lines what you make — your medium, your subjects, the work you are proudest of." required maxlength="900"></textarea></div><div class="form-group full"><label for="ffWhy">WHY PAIRED, WHY NOW? — ONE LINE</label><input id="ffWhy" class="field" name="why" placeholder="One honest line is plenty." maxlength="220"></div><div class="full"><button class="primary" type="submit">APPLY FOR THE FOUNDING 100 ✦</button><p id="foundingMsg" style="margin-top:10px;line-height:1.6" role="alert"></p>${foundingFormNote()}</div></form></div></div></section>
 <section class="section"><div class="shell"><div class="panel" style="text-align:center"><div class="eyebrow">Not applying today?</div><h2 class="section-title" style="font-size:30px">THE HOUSE IS STILL <span class="paint">OPEN.</span></h2><p class="sub" style="max-width:560px;margin:0 auto 16px">Watch the demand wall fill, start selling free as a Solo, or read the membership math — every door stays open.</p><div class="actions" style="justify-content:center"><a class="primary" href="#/board" style="text-decoration:none">SEE THE COMMISSION BOARD →</a><a class="outline" href="#/sell" style="text-decoration:none;display:inline-flex;align-items:center">START SELLING FREE</a><a class="outline" href="#/membership" style="text-decoration:none;display:inline-flex;align-items:center">MEMBERSHIP</a></div></div></div></section>`}
 /* ===== SHARE CARDS (queue 4) — lightweight canvas cards, generated client-side.
    One shared renderer for piece + artist cards. A card carries ONLY facts the
