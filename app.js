@@ -1812,12 +1812,13 @@ function soundFeeLine(name,amount){let f=creatorFee(name,amount);return '<p clas
 /* COLLABORATION BRIDGE (pattern 05) — musician | THE PAIR | painter:
    the two makers flank the work they make together. */
 function soundBridge(t){if(!t)return '';let p=soundPiece(t);return '<div class="bridge"><div class="bridge-side"><div class="eyebrow" style="color:'+soundHue(t.genre)+'">The musician</div>'+avatarMono(t.musician,'margin:12px 0 10px')+'<h3>'+safe(t.musician)+'</h3><p class="meta">“'+safe(t.title)+'” · '+safe(t.genre)+'</p><div class="actions" style="margin-top:12px"><a class="outline" href="#/sound/track/'+t.id+'" style="text-decoration:none;display:inline-flex;align-items:center">HEAR THE TRACK ↗</a></div></div><div class="bridge-mid" aria-hidden="true"><span class="bridge-eq"><i></i><i></i><i></i><i></i><i></i></span><b>THE PAIR</b><span class="bridge-plus">ONE SONG · ONE PAINTING</span></div><div class="bridge-side"><img class="bridge-art" src="'+safe(p.img)+'" alt="'+safe(p.title)+' by '+safe(p.artist)+'" loading="lazy"><div class="eyebrow" style="color:'+catHue(p.category)+'">The painter</div><h3>'+safe(p.artist)+'</h3><p class="meta">“'+safe(p.title)+'” · '+safe(p.category)+'</p><div class="actions" style="margin-top:12px"><a class="outline" href="#/art/'+p.id+'" style="text-decoration:none;display:inline-flex;align-items:center">SEE THE PAINTING ↗</a></div></div></div><p class="lp-variant">WHERE MUSIC MEETS ART.</p>'}
-function soundHome(){let worlds=SOUND_WORLDS.map(function(w){let p=SEED.find(function(a){return a.id===w.piece})||SEED[0];return '<button class="sound-world" style="--h:'+w.hue+'" data-action="sound-world" data-genre="'+safe(w.name)+'" aria-label="Enter the '+safe(w.name)+' world"><img src="'+safe(p.img)+'" alt="" loading="lazy"><span class="sound-world-scrim"></span><span class="sound-world-label"><b>'+safe(w.name.toUpperCase())+'</b><small>'+safe(w.line)+'</small></span></button>'}).join('');
+function soundHomeLocal(){let worlds=SOUND_WORLDS.map(function(w){let p=SEED.find(function(a){return a.id===w.piece})||SEED[0];return '<button class="sound-world" style="--h:'+w.hue+'" data-action="sound-world" data-genre="'+safe(w.name)+'" aria-label="Enter the '+safe(w.name)+' world"><img src="'+safe(p.img)+'" alt="" loading="lazy"><span class="sound-world-scrim"></span><span class="sound-world-label"><b>'+safe(w.name.toUpperCase())+'</b><small>'+safe(w.line)+'</small></span></button>'}).join('');
 let genre=state.soundGenre||'All worlds';let trail=TRACKS.filter(function(t){return genre==='All worlds'||t.genre===genre});
 let featured=TRACKS.slice(0,4).map(soundCard).join('');
 let makers=MUSICIANS.map(function(m){let t=TRACKS.find(function(x){return x.musician===m.name});let f=creatorFee(m.name,100);return '<div class="panel">'+avatarMono(m.name,'margin-bottom:12px')+'<h3>'+safe(m.name)+'</h3><p class="meta" style="color:'+soundHue(m.genre)+';font-weight:900;letter-spacing:1.2px">'+safe(m.genre.toUpperCase())+' · MUSICIAN</p><p class="meta" style="margin:6px 0">'+f.tier+' tier — '+f.rate+'% platform fee, shown before anyone accepts</p><p style="line-height:1.6">'+safe(m.blurb)+'</p><div class="actions" style="margin-top:12px"><button class="outline" data-action="sound-contact" data-artist="'+safe(m.name)+'">MESSAGE ✉</button>'+(t?'<a class="outline" href="#/sound/track/'+t.id+'" style="text-decoration:none;display:inline-flex;align-items:center">HEAR THE TRACK ↗</a>':'')+'</div></div>'}).join('');
 let orders=soundStore().orders;
 return `<div class="page-hero" style="--ph:#39D0C4"><div class="shell"><div class="eyebrow">PAIRED Sound · One song · One original artwork · One experience</div><h1 class="page-title">YOUR STORY DESERVES ITS OWN <span class="paint">SOUND.</span></h1><p class="sub">Commission an original song — or THE PAIR: a song and an original painting, made for your story by two human artists. The catalog below is their audition tape; the Sound Board is where the work gets made.</p><div class="actions" style="margin-top:16px"><button class="primary" data-action="sound-brief-pair">CREATE YOUR PAIR ✦</button><button class="outline" data-action="sound-brief-song">GET A SONG MADE FOR YOU</button><button class="outline" data-action="scrollto" data-target="soundTrail">EXPLORE THE SOUND TRAIL ↓</button>${orders.length?'<a class="outline" href="#/sound/orders" style="text-decoration:none;display:inline-flex;align-items:center">YOUR SOUND ORDERS ('+orders.length+') →</a>':''}</div></div></div><section class="section" style="padding-top:26px"><div class="shell"><div class="notice">Sound runs as a labeled demo in this prototype: previews are timed visual players (no audio streams yet), prices are DEMO prices, and checkout is simulated. Real streaming, licensing and payouts arrive with the engine. Human-made music only — no AI-generated music is sold here.</div><div class="section-top" style="margin-top:26px"><div><div class="eyebrow eb-teal">Eight worlds · walk the trail</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">CHOOSE A <span class="paint">WORLD.</span></h2></div></div><div class="sound-worlds">${worlds}</div></div></section><section class="section alt"><div class="shell"><div class="section-top"><div><div class="eyebrow eb-rose">Featured pairs</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">SONGS ARE NEVER <span class="paint">NAKED HERE.</span></h2><p class="sub">Every track carries an original painting. Buy the track, or buy THE PAIR — the song and its painting, with a rights record from both creators.</p></div><a class="text-link" href="#/sound/board">THE SOUND BOARD →</a></div>${soundBridge(TRACKS[0])}<div class="art-grid">${featured}</div></div></section><section class="section" id="soundTrail"><div class="shell"><div class="section-top"><div><div class="eyebrow eb-violet">The Sound Trail</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">WALK THE <span class="paint">TRAIL.</span></h2></div>${genre!=='All worlds'?'<button class="outline" data-action="sound-world" data-genre="All worlds">✕ SHOW ALL WORLDS</button>':'<p class="meta" style="max-width:320px">Every stop is a track’s full scene — painting huge, preview playing, both artists one tap away.</p>'}</div>${genre!=='All worlds'?'<p class="meta" style="margin-bottom:14px">Showing the <b style="color:#fff">'+safe(genre)+'</b> world.</p>':''}<div class="art-grid">${trail.length?trail.map(soundCard).join(''):'<div class="empty">No tracks in this world yet — the makers are warming up.</div>'}</div></div></section><section class="section alt"><div class="shell"><div class="section-top"><div><div class="eyebrow eb-amber">How a Pair is made</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">ONE BRIEF. <span class="paint">TWO MAKERS.</span></h2></div><a class="text-link" href="#/sound/board">POST A SOUND BRIEF →</a></div><div class="steps"><div class="step"><span class="number">01</span><h3>BRIEF THE MOMENT</h3><p>A wedding, an anthem, a soundtrack for the thing you will never forget. One brief — a song, or a song and its painting.</p></div><div class="step"><span class="number">02</span><h3>MAKERS PROPOSE, SEPARATELY</h3><p>The musician and the painter each send their own itemized proposal. You see both halves — and the combined total — before you say yes.</p></div><div class="step"><span class="number">03</span><h3>TWO DELIVERIES, ONE EXPERIENCE</h3><p>Each creator delivers on their own milestone. The song lands, the painting lands, and THE PAIR is complete.</p></div></div></div></section><section class="section"><div class="shell"><div class="section-top"><div><div class="eyebrow eb-pink">The makers</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MEET THE <span class="paint">MUSICIANS.</span></h2><p class="sub">Demo-seeded makers for this prototype — every one carries a human-made declaration, on the record, in their own words.</p></div></div><div class="art-grid">${makers}</div></div></section>`}
+function soundHome(){try{pairedRefreshSound()}catch(e){}return soundHomeLocal()+srvSoundReleasesStrip()}
 function soundTrack(id){let t=trackById(id);if(!t)return notFound();let p=soundPiece(t);let m=musicianByName(t.musician);let hue=soundHue(t.genre);let lic=state.soundLic||'PERSONAL';let others=TRACKS.filter(function(x){return x.id!==t.id}).slice(0,3);
 let licOpt=function(key,name,desc,priceHtml){return '<button type="button" class="lic-opt'+(lic===key?' on':'')+'" data-action="sound-lic" data-lic="'+key+'" aria-pressed="'+(lic===key?'true':'false')+'"><b>'+name+'</b><span>'+desc+'</span>'+priceHtml+'</button>'};
 let licenses='<div class="lic-opts">'
@@ -2010,6 +2011,171 @@ function srvMoney(cents){return money((Number(cents)||0)/100)}
 function srvDate(iso){if(!iso)return '—';let d=new Date(iso);return isNaN(d.getTime())?'—':d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
 function srvShort(id){return String(id||'').slice(0,8)}
 function srvErr(r,fb){try{let e=r&&r.data&&r.data.error;if(e)return e.message||e.code||fb;if(r)return 'the server answered '+r.status}catch(e){}return fb||'the server is not answering right now'}
+/* ==== v81 — SOUND WIRING (Sound build, founder full-site order 2026-11-15) ====
+   The dormant v64 Sound faces above stay exactly as they are for the
+   signed-out/public read: demo tracks keep their DEMO labels and
+   nothing in them sells. What v81 adds is the ENGINE lane beside them:
+   real releases served by GET /v1/sound/releases, an artist Sound
+   studio (presign → PUT to storage from the browser → attach →
+   publish) riding the same endpoints the engine enforces, the buyer's
+   Music Shelf, and buy doors that call the engine checkout with the
+   v80 honest-answer handling. Pilot content from the recruiting bench
+   is evidenced, NOT authorized — nothing here presents any real
+   artist's track as listed or sellable; only engine records render. */
+async function pairedRefreshSound(){
+ if(typeof window==='undefined')return;
+ if(!window.__pairedSoundTried||Date.now()-window.__pairedSoundTried>20000){
+  window.__pairedSoundTried=Date.now();
+  let r=await pairedApi('/v1/sound/releases',{auth:false});
+  if(r&&r.ok&&r.data&&Array.isArray(r.data.releases)){window.__pairedSoundReleases=r.data.releases;if(location.hash.indexOf('#/sound')===0)render()}
+  else if(pairedSignedIn())srvMarkDown('sound','sound releases read')
+ }
+}
+async function pairedRefreshSoundStudio(){
+ if(typeof window==='undefined'||!pairedSignedIn())return;
+ if(srvIsDown('soundstudio'))return;
+ if(!window.__pairedSoundStudioTried||Date.now()-window.__pairedSoundStudioTried>20000){
+  window.__pairedSoundStudioTried=Date.now();
+  let r=await pairedApi('/v1/sound/studio');
+  if(r&&r.ok&&r.data){window.__pairedSoundStudio=r.data;let h=location.hash||'';if(h.indexOf('#/studio')===0||h.indexOf('#/dashboard')===0)render()}
+  else srvMarkDown('soundstudio','sound studio read');
+ }
+ let sh=await pairedApi('/v1/sound/shelf');
+ if(sh&&sh.ok&&sh.data){window.__pairedShelf=sh.data.shelf||[]}
+ else srvMarkDown('soundstudio','music shelf read');
+}
+function srvSoundCover(r){
+ let media=r.media||[];
+ let c=media.find(function(m){return m.kind==='cover'})||media.find(function(m){return m.kind==='image'});
+ return c&&c.url?c.url:null;
+}
+function srvSoundDur(sec){
+ if(!sec&&sec!==0)return '';
+ let m=Math.floor(sec/60),s=Math.round(sec%60);
+ return m+':'+(s<10?'0':'')+s;
+}
+function srvSoundReleasesStrip(){
+ let rels=(typeof window!=='undefined'&&window.__pairedSoundReleases)||null;
+ if(srvIsDown('sound')&&pairedSignedIn())return '<section class="section"><div class="shell">'+srvDownInner()+'</div></section>';
+ if(!rels||!rels.length)return '';
+ let cards=rels.map(function(r){
+  let cov=srvSoundCover(r);
+  let rel=r.release||{};
+  let tracks=(r.tracks||[]).length;
+  return '<a class="srv-rel-card" href="#/sound/srvrelease/'+r.id+'">'+(cov?'<span class="srv-rel-cover" style="display:block;background-image:url(\''+safe(cov)+'\')"></span>':'')+'<b>'+safe(r.title)+'</b><span class="srv-rel-meta">'+safe(rel.artistCredit||'A PAIRED artist')+(rel.genre?' · '+safe(rel.genre):'')+' · '+tracks+' track'+(tracks===1?'':'s')+(rel.explicit?' · EXPLICIT':'')+'</span><span class="srv-rel-price">'+srvMoney(r.priceCents)+' — ON THE ENGINE</span></a>';
+ }).join('');
+ return '<section class="section"><div class="shell"><div class="section-top"><div><div class="eyebrow">Live on the engine</div><h2 class="section-title" style="font-size:clamp(28px,3.6vw,42px)">REAL <span class="paint">RELEASES.</span></h2></div><p class="meta" style="max-width:340px">These are live engine listings — posted by verified artists, sold at 0% commission. The demo worlds above stay labeled demos; these are the real shelf.</p></div><div class="srv-sound-grid">'+cards+'</div></div></section>';
+}
+function srvSoundReleasePage(id){
+ try{pairedRefreshSound()}catch(e){}
+ let rels=(typeof window!=='undefined'&&window.__pairedSoundReleases)||null;
+ let r=rels?rels.find(function(x){return x.id===id})||null:null;
+ if(!r){
+  if(srvIsDown('sound')&&pairedSignedIn())return srvDownPage('THIS RELEASE.');
+  return '<section class="section"><div class="shell"><div class="panel"><p class="sub">Reading this release from the engine… if it is live, it lands here in a moment.</p></div></div></section>';
+ }
+ let rel=r.release||{};
+ let cov=srvSoundCover(r);
+ let mine=srvMeId()&&srvMeId()===r.accountId;
+ let tracks=(r.tracks||[]).map(function(t,i){return '<li><span>'+(i+1)+'. '+safe(t.title||'Untitled track')+'</span><span>'+srvSoundDur(t.durationSec)+'</span></li>'}).join('');
+ let buyArea='';
+ if(mine)buyArea='<div class="notice">This release is yours — manage it from <a class="text-link" href="#/studio">your Studio</a>. Artists never buy their own work here; the engine refuses it too.</div>';
+ else buyArea='<div class="actions" style="margin-top:16px"><button class="primary" data-srv="buy" data-lid="'+r.id+'">BUY THIS RELEASE — '+srvMoney(r.priceCents)+' ✦</button></div><p class="form-note" style="margin-top:10px">Checkout runs on the engine: the release is delivered to your Music Shelf in your Studio the moment payment settles, and the artist receives 100% of this price — Paired takes no commission on music. If the payment rail is not open yet, this button says so plainly and nothing is charged.</p>'+'<p class="buy-disclosure">Your card statement will show APEX GRID ENG. Payments are processed by Apex Grid Engineering PLLC (interim, until Paired\u2019s own entity stands).</p>';
+ return '<section class="section"><div class="shell"><a class="text-link" href="#/sound">← ALL SOUND</a><div class="two-col" style="margin-top:18px"><div>'+(cov?'<img src="'+safe(cov)+'" alt="Cover art for '+safe(r.title)+'" style="width:100%;border-radius:16px">':'<div class="empty">This release carries no cover art yet.</div>')+'</div><div><div class="eyebrow">Paired Sound · live release</div><h1 class="page-title" style="font-size:clamp(34px,4.6vw,54px)">'+safe(r.title)+'</h1><p class="sub">'+safe(rel.artistCredit||'A PAIRED artist')+(rel.genre?' · '+safe(rel.genre):'')+(rel.releaseType?' · '+safe(rel.releaseType.toUpperCase()):'')+(rel.explicit?' · EXPLICIT':'')+'</p>'+(r.description?'<p class="sub" style="margin-top:10px">'+safe(r.description)+'</p>':'')+'<ul class="srv-tracklist">'+tracks+'</ul>'+buyArea+'</div></div></div></section>';
+}
+function srvSoundStudioBlock(){
+ try{pairedRefreshSoundStudio()}catch(e){}
+ if(srvIsDown('soundstudio'))return '<div class="section-top" style="margin-top:38px"><div><div class="eyebrow">Paired Sound</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MY <span class="paint">SOUND.</span></h2></div></div><div class="panel studio-panel">'+srvDownInner()+'</div>';
+ let d=(typeof window!=='undefined'&&window.__pairedSoundStudio)||null;
+ if(!d)return '<div class="section-top" style="margin-top:38px"><div><div class="eyebrow">Paired Sound</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MY <span class="paint">SOUND.</span></h2></div></div><div class="panel studio-panel"><p class="sub">Reading your releases from the engine…</p></div>';
+ let cap=d.capacity||{};
+ let used=cap.used||{tracks:0,albums:0,storageBytes:0};
+ let capLine='Tier capacity: '+(cap.tracks===null||cap.tracks===undefined?'unlimited tracks':cap.tracks+' tracks')+' · '+(cap.albums===null||cap.albums===undefined?'unlimited albums':cap.albums+' albums')+' · '+Math.round((cap.storageBytes||0)/1073741824)+' GB masters — you are using '+used.tracks+' tracks, '+used.albums+' albums, '+(Math.round((used.storageBytes||0)/104857.6)/10)+' MB. Music commission: 0% at every tier, forever.';
+ let rows=d.releases&&d.releases.length?d.releases.map(function(r){
+  let rel=r.release||{};
+  let tc=(r.tracks||[]).length;
+  return '<div class="srv-sound-row"><div><b>'+safe(r.title)+'</b><div class="srv-rel-meta">'+safe(rel.releaseType||'single')+' · '+tc+' track'+(tc===1?'':'s')+' · '+srvMoney(r.priceCents)+' · rights: '+safe(rel.rightsState||'declared')+'</div></div><span class="badge">'+safe((r.status||'draft').toUpperCase())+'</span></div>';
+ }).join(''):'<div class="empty">No releases on the engine yet. Post your first track — the upload rides straight to storage, and the publish gate checks your tracks, your rights declaration and your tier capacity before anything goes live.</div>';
+ return '<div class="section-top" style="margin-top:38px"><div><div class="eyebrow">Paired Sound — engine record</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MY <span class="paint">SOUND.</span></h2></div><a class="primary" href="#/studio/soundpost" style="text-decoration:none">+ POST A RELEASE</a></div><div class="panel studio-panel"><p class="srv-cap-line">'+safe(capLine)+'</p>'+rows+'</div>';
+}
+function srvShelfBlock(){
+ let shelf=(typeof window!=='undefined'&&window.__pairedShelf)||null;
+ if(srvIsDown('soundstudio'))return '<div class="section-top" style="margin-top:38px"><div><div class="eyebrow">Owned, not just saved</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MY MUSIC <span class="paint">SHELF.</span></h2></div></div><div class="panel studio-panel">'+srvDownInner()+'</div>';
+ if(!shelf)return '<div class="section-top" style="margin-top:38px"><div><div class="eyebrow">Owned, not just saved</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MY MUSIC <span class="paint">SHELF.</span></h2></div></div><div class="panel studio-panel"><p class="sub">Reading your shelf from the engine…</p></div>';
+ if(!shelf.length)return '<div class="section-top" style="margin-top:38px"><div><div class="eyebrow">Owned, not just saved</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MY MUSIC <span class="paint">SHELF.</span></h2></div></div><div class="panel studio-panel"><div class="empty">Your shelf is empty — releases you buy land here with their full tracks, and the download links are re-issued fresh every time you open it. A purchase never ends at a dead link.</div></div>';
+ let rows=shelf.map(function(e){
+  let tks=(e.tracks||[]).map(function(t){return '<div class="srv-sound-row"><div><b>'+safe(t.title||'Untitled track')+'</b><div class="srv-rel-meta">'+srvSoundDur(t.durationSec)+'</div></div>'+(t.downloadUrl?'<button class="mini-btn" data-srv="shelf-download" data-oid="'+e.orderId+'" data-url="'+safe(t.downloadUrl)+'">DOWNLOAD</button>':'<span class="badge">LINK PENDING</span>')+'</div>'}).join('');
+  return '<div style="margin-bottom:18px"><h3 style="margin-bottom:4px">'+safe(e.release?e.release.title:'Release')+'</h3><p class="srv-cap-line">Bought '+srvDate(e.purchasedAt)+' · full songs, yours from this shelf.</p>'+tks+'</div>';
+ }).join('');
+ return '<div class="section-top" style="margin-top:38px"><div><div class="eyebrow">Owned, not just saved</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MY MUSIC <span class="paint">SHELF.</span></h2></div></div><div class="panel studio-panel">'+rows+'</div>';
+}
+function studioSoundPostPage(){
+ if(!pairedSignedIn())return signInGate('studio');
+ let su=get(STORE.signup,null);
+ let capsLine='';
+ try{pairedRefreshSoundStudio()}catch(e){}
+ let d=(typeof window!=='undefined'&&window.__pairedSoundStudio)||null;
+ if(d&&d.capacity){let cap=d.capacity;capsLine='Your tier holds '+(cap.tracks===null||cap.tracks===undefined?'unlimited tracks':cap.tracks+' tracks')+' · '+Math.round((cap.storageBytes||0)/1073741824)+' GB of masters. The engine enforces the cap at publish — the cap printed before you begin is the cap that applies.'}
+ return srvStudioHero('sell',su)+`<div class="panel"><h2 style="font-size:26px;margin-bottom:6px">POST A RELEASE — TO THE ENGINE.</h2><p class="sub" style="margin-bottom:16px">This posts to the production engine: the release is created as a draft, your master audio travels straight to storage from your browser, and then the publish gate runs — at least one track, both legs of the rights declaration, originals only at launch, and your tier capacity. If any leg cannot complete, this page says exactly which one — a draft is never dressed as published.</p>
+<form id="srvSoundForm" class="form-grid">
+<div class="form-group full"><label for="ssTracks">MASTER AUDIO — FULL SONGS ONLY *</label><input id="ssTracks" class="field" type="file" accept="audio/mpeg,audio/wav,audio/x-wav,audio/flac,audio/mp4,audio/ogg" multiple><p class="form-note" style="margin-top:6px">MP3, WAV, FLAC, M4A or OGG — one file per track, in album order. Full songs only; there are no previews to upload.</p></div>
+<div class="form-group"><label for="ssTitle">RELEASE TITLE *</label><input id="ssTitle" class="field" name="title" maxlength="200" required placeholder="Name your release"></div>
+<div class="form-group"><label for="ssPrice">PRICE (USD) *</label><input id="ssPrice" class="field" name="price" type="number" min="0.01" max="1000000" step="0.01" required placeholder="10"></div>
+<div class="form-group"><label for="ssType">RELEASE TYPE *</label><select id="ssType" class="field" name="releaseType"><option value="single">Single</option><option value="ep">EP</option><option value="album">Album</option></select></div>
+<div class="form-group"><label for="ssGenre">GENRE</label><input id="ssGenre" class="field" name="genre" maxlength="120" placeholder="e.g. Soul, Gospel, Indie"></div>
+<div class="form-group"><label for="ssCredit">ARTIST CREDIT</label><input id="ssCredit" class="field" name="artistCredit" maxlength="200" placeholder="The name the release carries"></div>
+<div class="form-group"><label for="ssDate">RELEASE DATE</label><input id="ssDate" class="field" name="releaseDate" type="date"></div>
+<div class="form-group full"><label for="ssDesc">ABOUT THE RELEASE</label><textarea id="ssDesc" class="field" name="description" maxlength="4000" placeholder="The story, the sessions, who played — what should a listener know?"></textarea></div>
+<div class="form-group full"><label class="id-check" for="ssExplicit"><input type="checkbox" id="ssExplicit" name="explicit"><span>This release contains explicit lyrics — label it honestly; it carries the mark everywhere it appears.</span></label></div>
+<div class="form-group full"><label class="id-check" for="ssRightsRec"><input type="checkbox" id="ssRightsRec" name="rightsRecording" required><span>RIGHTS — THE RECORDING: I control the master recording of every track on this release, or I am authorized to license it here.</span></label></div>
+<div class="form-group full"><label class="id-check" for="ssRightsComp"><input type="checkbox" id="ssRightsComp" name="rightsComposition" required><span>RIGHTS — THE COMPOSITION: I wrote the underlying songs, or I hold the rights / licence to sell them as downloads here. Both declarations are retained for the life of my account.</span></label></div>
+<div class="form-group full"><label class="id-check" for="ssOriginal"><input type="checkbox" id="ssOriginal" name="original" required><span>ORIGINALS-ONLY AT LAUNCH: every track here is an original — no covers, no uncleared samples, no remixes of another artist's work. Those HOLD for a per-release rights review and do not publish on a declaration alone.</span></label></div>
+<div class="full"><button class="primary" type="submit">POST THIS RELEASE ✦</button><p class="form-note" style="margin-top:8px">${capsLine}</p><p id="srvSoundMsg" style="margin-top:10px;line-height:1.6" role="alert"></p></div>
+</form></div></div></section>`;
+}
+async function srvSoundForm(form){
+ let msg=document.getElementById('srvSoundMsg');
+ function say(t){if(msg)msg.textContent=t}
+ let filesEl=document.getElementById('ssTracks');
+ let files=filesEl&&filesEl.files?Array.prototype.slice.call(filesEl.files):[];
+ if(!files.length){say('✕ Attach at least one master audio file — a release needs its tracks before it can exist.');return}
+ let fd=new FormData(form);
+ let title=(fd.get('title')||'').toString().trim();
+ let price=Math.round(parseFloat((fd.get('price')||'').toString())*100);
+ if(!title||!(price>0)){say('✕ A release needs a title and a price above zero — the same guards the engine runs.');return}
+ say('Creating the release on the engine…');
+ let cr=await pairedApi('/v1/listings',{method:'POST',body:{medium:'music',title:title,description:(fd.get('description')||'').toString(),priceCents:price,releaseType:(fd.get('releaseType')||'single').toString(),genre:(fd.get('genre')||'').toString()||null,artistCredit:(fd.get('artistCredit')||'').toString()||null,releaseDate:(fd.get('releaseDate')||'').toString()||null,explicit:!!form.querySelector('[name="explicit"]:checked'),rightsRecording:!!form.querySelector('[name="rightsRecording"]:checked'),rightsComposition:!!form.querySelector('[name="rightsComposition"]:checked'),contentKind:'original'}});
+ if(!cr||!cr.ok||!cr.data||!cr.data.listing){say('✕ The engine did not create the release — '+(cr&&cr.data&&cr.data.error?cr.data.error.message:'it did not answer')+'. Nothing was posted.');return}
+ let lid=cr.data.listing.id;
+ for(let i=0;i<files.length;i++){
+  let f=files[i];
+  say('Uploading track '+(i+1)+' of '+files.length+' — '+f.name+'…');
+  let ct=f.type||(f.name.toLowerCase().endsWith('.mp3')?'audio/mpeg':f.name.toLowerCase().endsWith('.wav')?'audio/wav':f.name.toLowerCase().endsWith('.flac')?'audio/flac':f.name.toLowerCase().endsWith('.m4a')?'audio/mp4':f.name.toLowerCase().endsWith('.ogg')?'audio/ogg':'');
+  let pr=await pairedApi('/v1/uploads/presign',{method:'POST',body:{contentType:ct,kind:'audio'}});
+  if(!pr||!pr.ok||!pr.data||!pr.data.url){say('✕ Track '+(i+1)+' could not start its upload — '+(pr&&pr.status===503?'storage is not configured on the engine yet':'the engine did not issue an upload door')+'. The release stays a draft in your Studio with the tracks that did land.');try{pairedRefreshSoundStudio()}catch(e){} return}
+  let putOk=false;
+  try{let put=await fetch(pr.data.url,{method:'PUT',headers:{'Content-Type':ct},body:f});putOk=!!put.ok}catch(e){putOk=false}
+  if(!putOk){say('✕ Track '+(i+1)+' did not reach storage. The release stays a draft in your Studio — re-post when the pipe is clear; nothing half-uploaded is ever shown as published.');try{pairedRefreshSoundStudio()}catch(e){} return}
+  let trackTitle=f.name.replace(/\.[A-Za-z0-9]+$/,'');
+  let dur=await new Promise(function(res){try{let a=document.createElement('audio');a.preload='metadata';a.onloadedmetadata=function(){let d=a.duration;try{URL.revokeObjectURL(a.src)}catch(e){} res(isFinite(d)?Math.round(d):null)};a.onerror=function(){res(null)};a.src=URL.createObjectURL(f)}catch(e){res(null)}});
+  let at=await pairedApi('/v1/listings/'+lid+'/media',{method:'POST',body:{key:pr.data.key,kind:'audio',title:trackTitle,sizeBytes:f.size,durationSec:dur}});
+  if(!at||!at.ok){say('✕ Track '+(i+1)+' uploaded but the engine did not attach it — the release stays a draft in your Studio.');try{pairedRefreshSoundStudio()}catch(e){} return}
+ }
+ say('Publishing — the engine checks your tracks, your rights declaration and your tier capacity…');
+ let pb=await pairedApi('/v1/listings/'+lid+'/publish',{method:'POST',body:{}});
+ if(!pb||!pb.ok){say('✕ The publish gate held this release: '+(pb&&pb.data&&pb.data.error?pb.data.error.message:'the engine did not answer')+' It stays a draft in your Studio — nothing is dressed as published.');try{pairedRefreshSoundStudio()}catch(e){} return}
+ say('✓ Live on the engine — your release is published to Paired Sound at 0% commission.');
+ toast('Release published to the engine ✦');
+ try{pairedRefreshSoundStudio();pairedRefreshSound()}catch(e){}
+ setTimeout(function(){location.hash='#/studio'},900);
+}
+function srvShelfDownload(oid,url){
+ pairedApi('/v1/orders/'+oid+'/download',{method:'POST',body:{}}).then(function(r){
+  if(r&&r.ok&&url)window.open(url,'_blank');
+  else toast('The download did not log — try again in a moment.');
+ });
+}
+
 function srvMeId(){try{let m=window.__pairedMe;return (m&&m.account&&m.account.id)||null}catch(e){return null}}
 function srvIsAdmin(){try{let m=window.__pairedMe;return !!(m&&m.roles&&m.roles.indexOf('admin')>=0)}catch(e){return false}}
 function srvSavedSet(){let s={};try{let b=window.__pairedStudioBuyer;if(b&&b.saved)b.saved.forEach(function(l){s[l.id]=1})}catch(e){}return s}
@@ -2238,7 +2404,7 @@ function studioServerFace(d,su){
 <div class="section-top" style="margin-top:38px"><div><div class="eyebrow">The money, line by line</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">SALES &amp; <span class="paint">EARNINGS.</span></h2></div></div>
 <div class="panel studio-panel"><div class="earn-lines"><div class="earn-row"><span>Gross (engine orders)</span><b>${srvMoney(e.grossCents)}</b></div><div class="earn-row total"><span>Settled artist share</span><b>${srvMoney(e.settledArtistShareCents)}</b></div></div>${earnRows}<p class="form-note" style="margin-top:10px">Transfer and payout are separate states and are always shown separately above — a transfer to your payout account is not the same event as money reaching your bank.</p></div>
 ${srvArtistPanels()}
-</div></section>`;
+</div>${srvSoundStudioBlock()}</section>`;
 }
 function studioServerBuyFace(d,su){
  let savedHtml=d.saved&&d.saved.length?'<div class="art-grid">'+d.saved.map(srvCard).join('')+'</div>':'<div class="empty">Nothing saved on your account yet. When a piece stops you mid-scroll, tap the heart — it waits for you here, on the record, and the artist sees the count (never your name).</div>';
@@ -2255,7 +2421,7 @@ ${savedHtml}
 <div class="panel studio-panel">${ordHtml}</div>
 <div class="section-top" style="margin-top:38px"><div><div class="eyebrow">Demand you posted</div><h2 class="section-title" style="font-size:clamp(30px,4vw,46px)">MY <span class="paint">BRIEFS.</span></h2></div><a class="text-link" href="#/board">THE BOARD →</a></div>
 <div class="panel studio-panel">${brHtml}</div>
-</div></section>`;
+${srvShelfBlock()}</div></section>`;
 }
 function studioServerPost(su){
  return srvStudioHero('post',su)+`<div class="panel"><h2 style="font-size:26px;margin-bottom:6px">POST A PIECE — TO THE ENGINE.</h2><p class="sub" style="margin-bottom:16px">This posts to the production engine: the piece is created as a draft, your photo travels to storage, and then it publishes to the public wall. If any leg cannot complete, this page says exactly which one — a draft is never dressed up as a listing.</p>
@@ -2570,9 +2736,10 @@ function srvAdminOrder(oid,kind){
 function srvAction(btn){
  let a=btn.dataset.srv;
  if(a==='resend-2fa'){PairedAuth.signInResendSecondFactor().then(function(){toast('A fresh code is on its way ✦')}).catch(function(e){toast(e.message||'The resend did not land.')});return}
- if(a==='retry'){_srvDown={};try{pairedRefreshMe(true)}catch(e){}try{pairedRefreshFounding()}catch(e){}try{pairedRefreshStudio(true)}catch(e){}try{pairedRefreshArtist()}catch(e){}try{pairedRefreshVerification()}catch(e){}try{pairedRefreshBriefs()}catch(e){}try{pairedRefreshRoom(true)}catch(e){}try{pairedRefreshAdmin()}catch(e){}let hp=(location.hash||'').split('/');if(hp[1]==='piece')try{pairedRefreshPiece(hp[2])}catch(e){}if(hp[1]==='wall')try{pairedRefreshWall(hp[2])}catch(e){}if(hp[1]==='brief')try{pairedRefreshBrief(hp[2])}catch(e){}if(hp[1]==='common'&&hp[2]==='thread')try{pairedRefreshThread(hp[3])}catch(e){}srvRerender();return}
+ if(a==='retry'){_srvDown={};try{pairedRefreshMe(true)}catch(e){}try{pairedRefreshFounding()}catch(e){}try{pairedRefreshStudio(true)}catch(e){}try{pairedRefreshArtist()}catch(e){}try{pairedRefreshVerification()}catch(e){}try{pairedRefreshBriefs()}catch(e){}try{pairedRefreshRoom(true)}catch(e){}try{pairedRefreshAdmin()}catch(e){}try{pairedRefreshSound()}catch(e){}try{pairedRefreshSoundStudio()}catch(e){}let hp=(location.hash||'').split('/');if(hp[1]==='piece')try{pairedRefreshPiece(hp[2])}catch(e){}if(hp[1]==='wall')try{pairedRefreshWall(hp[2])}catch(e){}if(hp[1]==='brief')try{pairedRefreshBrief(hp[2])}catch(e){}if(hp[1]==='common'&&hp[2]==='thread')try{pairedRefreshThread(hp[3])}catch(e){}srvRerender();return}
  if(a==='view'){let lid=btn.dataset.lid;if(lid&&pairedSignedIn()){try{pairedApi('/v1/listings/'+lid+'/view',{method:'POST',timeoutMs:8000}).then(function(){})}catch(e){}}return}
  if(a==='buy')return srvBuy(btn.dataset.lid);
+ if(a==='shelf-download')return srvShelfDownload(btn.dataset.oid,btn.dataset.url);
  if(a==='save')return srvSaveToggle(btn.dataset.lid);
  if(a==='follow')return srvFollowToggle(btn.dataset.acct);
  if(a==='pub-toggle')return srvPubToggle(btn.dataset.lid,btn.dataset.status);
@@ -2655,6 +2822,8 @@ function srvBind(){
    else if(msg){msg.textContent='That did not save — '+srvErr(r,'try again in a moment')+'.';msg.style.color='#FF8FA3'}
   });
  });
+ let ssf=document.getElementById('srvSoundForm');
+ if(ssf)ssf.addEventListener('submit',function(e){e.preventDefault();srvSoundForm(ssf)});
  let vf2=document.getElementById('srvVerifyForm');
  if(vf2)vf2.addEventListener('submit',function(e){
   e.preventDefault();
@@ -2728,7 +2897,7 @@ function srvBind(){
   });
  });
 }
-function render(){let rawHash=location.hash||'#/',qPos=rawHash.indexOf('?'),path=(qPos>=0?rawHash.slice(0,qPos):rawHash).slice(1),parts=path.split('/');let page=parts[1]||'';try{if(pwaLastPath!==null&&pwaLastPath!==path)pwaNoteEngagement();pwaLastPath=path}catch(e){}if(qPos>=0&&page==='explore'){try{let qp=new URLSearchParams(rawHash.slice(qPos+1));if(qp.has('q')){state.query=qp.get('q')||'';state.category='All art'}}catch(e){}}let content=page==='explore'?explore():page==='saved'?savedPage():page==='art'?detail(parts[2]):page==='buyers'?buyersPage():page==='sellers'?sellersPage():page==='policy'?policyPage():page==='packaging'?packagingPage():page==='verify'?verifyPage():page==='sell'?sell():page==='studio'?(parts[2]==='buy'?studioBuy():parts[2]==='post'?studioPost():parts[2]==='redit'?studioServerEditPage(parts[3]):parts[2]==='edit'?studioEditPage(parts[3]):(parts[2]===undefined&&PairedAuth.role()==='collector'?studioBuy():studio())):page==='dashboard'?(PairedAuth.role()==='collector'?studioBuy():studio()):page==='artists'?artists():page==='spotlight'?spotlight():page==='top'?topSellers():page==='login'?login():page==='account'?account():page==='alerts'?alertsPage():page==='membership'?membership():page==='founding100'?founding100():page==='artist'?artistProfile(parts[2]):page==='piece'?piecePage(parts[2]):page==='wall'?wallPage(parts[2]):page==='admin'?adminPage():page==='founders'?founders():page==='request'?requestArt():page==='board'?board():page==='brief'?briefPage(parts[2]):page==='messages'?messages():page==='cart'?basket():page==='sell-art-online'?sellArtOnline():page==='etsy-alternative'?etsyAlternative():page==='commissions'?commissionsGuide():page==='drops'?dropsPage():page==='sound'?(parts[2]==='release'?(parts[4]?notFound():soundReleasePage(parts[3])):parts[2]==='bundle'?(parts[4]?notFound():soundBundlePage(parts[3])):parts[2]==='track'?(parts[4]?notFound():soundTrack(parts[3])):parts[2]==='board'?(parts[3]?notFound():soundBoard()):parts[2]==='orders'?(parts[3]?notFound():(get(STORE.signup,null)&&get(STORE.signup,null).username?soundOrders():signInGate('orders'))):(parts[2]===undefined||parts[2]==='')?soundHome():notFound()):page==='common'?(parts[2]==='thread'?roomThreadPage(parts[3]):(parts[2]===undefined||parts[2]===''?commonRoom():notFound())):page===''?home():notFound();if(page==='dashboard'){try{history.replaceState(null,'',PairedAuth.role()==='collector'?'#/studio/buy':'#/studio')}catch(e){}}document.getElementById('app').innerHTML=header()+`<main id="main">${content}</main>`+footer()+(state.soundPlay?soundMini():'')+(state.guardFor?guardModal():'');if(document.body&&document.body.classList&&document.body.classList.toggle)document.body.classList.toggle('has-mini',!!state.soundPlay);document.title=`${page==='founders'?'FOUNDER — ':page?page.toUpperCase()+' — ':''}PAIRED · The Artist Network`;bind();spotInit()}
+function render(){let rawHash=location.hash||'#/',qPos=rawHash.indexOf('?'),path=(qPos>=0?rawHash.slice(0,qPos):rawHash).slice(1),parts=path.split('/');let page=parts[1]||'';try{if(pwaLastPath!==null&&pwaLastPath!==path)pwaNoteEngagement();pwaLastPath=path}catch(e){}if(qPos>=0&&page==='explore'){try{let qp=new URLSearchParams(rawHash.slice(qPos+1));if(qp.has('q')){state.query=qp.get('q')||'';state.category='All art'}}catch(e){}}let content=page==='explore'?explore():page==='saved'?savedPage():page==='art'?detail(parts[2]):page==='buyers'?buyersPage():page==='sellers'?sellersPage():page==='policy'?policyPage():page==='packaging'?packagingPage():page==='verify'?verifyPage():page==='sell'?sell():page==='studio'?(parts[2]==='buy'?studioBuy():parts[2]==='post'?studioPost():parts[2]==='soundpost'?studioSoundPostPage():parts[2]==='redit'?studioServerEditPage(parts[3]):parts[2]==='edit'?studioEditPage(parts[3]):(parts[2]===undefined&&PairedAuth.role()==='collector'?studioBuy():studio())):page==='dashboard'?(PairedAuth.role()==='collector'?studioBuy():studio()):page==='artists'?artists():page==='spotlight'?spotlight():page==='top'?topSellers():page==='login'?login():page==='account'?account():page==='alerts'?alertsPage():page==='membership'?membership():page==='founding100'?founding100():page==='artist'?artistProfile(parts[2]):page==='piece'?piecePage(parts[2]):page==='wall'?wallPage(parts[2]):page==='admin'?adminPage():page==='founders'?founders():page==='request'?requestArt():page==='board'?board():page==='brief'?briefPage(parts[2]):page==='messages'?messages():page==='cart'?basket():page==='sell-art-online'?sellArtOnline():page==='etsy-alternative'?etsyAlternative():page==='commissions'?commissionsGuide():page==='drops'?dropsPage():page==='sound'?(parts[2]==='release'?(parts[4]?notFound():soundReleasePage(parts[3])):parts[2]==='bundle'?(parts[4]?notFound():soundBundlePage(parts[3])):parts[2]==='track'?(parts[4]?notFound():soundTrack(parts[3])):parts[2]==='srvrelease'?(parts[4]?notFound():srvSoundReleasePage(parts[3])):parts[2]==='board'?(parts[3]?notFound():soundBoard()):parts[2]==='orders'?(parts[3]?notFound():(get(STORE.signup,null)&&get(STORE.signup,null).username?soundOrders():signInGate('orders'))):(parts[2]===undefined||parts[2]==='')?soundHome():notFound()):page==='common'?(parts[2]==='thread'?roomThreadPage(parts[3]):(parts[2]===undefined||parts[2]===''?commonRoom():notFound())):page===''?home():notFound();if(page==='dashboard'){try{history.replaceState(null,'',PairedAuth.role()==='collector'?'#/studio/buy':'#/studio')}catch(e){}}document.getElementById('app').innerHTML=header()+`<main id="main">${content}</main>`+footer()+(state.soundPlay?soundMini():'')+(state.guardFor?guardModal():'');if(document.body&&document.body.classList&&document.body.classList.toggle)document.body.classList.toggle('has-mini',!!state.soundPlay);document.title=`${page==='founders'?'FOUNDER — ':page?page.toUpperCase()+' — ':''}PAIRED · The Artist Network`;bind();spotInit()}
 function bind(){try{srvBind()}catch(e){}
 document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{let action=button.dataset.action,id=Number(button.dataset.id),artist=button.dataset.artist;if(action==='menu')toggleMenu();if(action==='menu-close')closeMenu();if(action==='guard-close'){state.guardFor=null;render()}if(action==='search-toggle'){let hf2=document.getElementById('headerSearchForm');if(hf2){hf2.classList.toggle('open');let hi=document.getElementById('headerSearch');if(hi&&hf2.classList.contains('open'))hi.focus()}}if(state.menuOpen&&action!=='menu'&&action!=='menu-close'&&action!=='theme'&&action!=='search-toggle')state.menuOpen=false;if(action==='start-selling'){state.signupRole='artist';go('/sell')}if(action==='cart')go('/cart');if(action==='account')go('/account');if(action==='alerts')go('/alerts');if(action==='spot-prev')spotShow((state.spotIx||0)-1);if(action==='spot-next')spotShow((state.spotIx||0)+1);if(action==='spot-dot')spotShow(Number(button.dataset.ix)||0);if(action==='drop-remind')dropRemind();if(action==='login')go('/login');if(action==='theme'){let t=get(STORE.theme,'dark')==='light'?'dark':'light';set(STORE.theme,t);applyTheme();toast(t==='light'?'Light mode ✦':'Dark mode ✦')}if(action==='scrollto'){let t=document.getElementById(button.dataset.target);if(t)t.scrollIntoView({behavior:'smooth'})}if(action==='share-piece')openShareCard('piece',id);if(action==='share-artist')openShareCard('artist',artist);if(action==='copy-link'){let link=button.dataset.link||'';let copied=()=>toast('Artist link copied — share it anywhere ✦');try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(link).then(copied,()=>toast(link));else toast(link)}catch(e){toast(link)}}if(action==='saved')go('/saved');if(action==='messages')go('/messages');if(action==='category'){state.category=button.dataset.cat;state.query='';go('/explore')}if(action==='request-art'){state.requestCat=state.category;go('/request')}if(action==='follow'){let on=toggleFollow(artist);StudioDB.syncFollowsFromMirror();render();toast(on?('Following '+artist+' — their pieces surface first in your Daily Edit, with a real alert ✦'):('Unfollowed '+artist))}if(action==='like'){let piece=all().find(function(x){return String(x.id)===String(id)});if(piece&&StudioDB.isOwn(piece)){toast('This one is yours — saves are how collectors raise a hand ♡');render()}else{let a=likes();set(STORE.likes,a.includes(id)?a.filter(x=>x!==id):[...a,id]);StudioDB.syncSavesFromMirror();render();toast('Saved artwork updated ♡')}}if(action==='buy'){let bl=FLIP_LINKS[String(id)]||FLIP_LINKS[id];if(bl){try{window.open(bl,'_blank')}catch(e){}}else{toast('Buying opens at launch — no payment is taken in this preview. Add the piece to your cart to walk the simulated checkout ✦')}}if(action==='release-publish'){let g=publishRelease(button.dataset.rid);render();toast(g.ok?'Release published to the catalog — sales dormant until the Sound launch ✦':(g.state==='held-for-review'?'Recorded and HELD FOR RIGHTS REVIEW — originals only at launch':'Still a draft — '+(g.reasons[0]||'the publish gate said no')))}if(action==='bundle-confirm'){let bc2=confirmBundle(button.dataset.bid,StudioDB.myKey());render();toast(bc2?(bundleIsLive(bc2)?'Both sides confirmed — the bundle is LIVE in the catalog, sales dormant ✦':'Your confirmation is recorded — the bundle publishes when both artists confirm'):'That bundle is not yours to confirm')}if(action==='shelf-download'){let sr=soundReleaseById(button.dataset.rid);let ds=soundDownloadState(StudioDB.myKey(),sr,Number(button.dataset.ix)||0);toast(ds.note||'Download state recorded')}if(action==='sound-buy'){let sl=SOUND_SALES[button.dataset.rid]||'';if(sl){try{window.open(sl,'_blank')}catch(e){}}else{toast('Music sales are dormant — this release is prepared in full, and no payment is taken until the Sound rehearsal purchase passes ✦')}}
 if(action==='verify-retry'){let cur=StudioDB.proofFor(StudioDB.myKey()||'guest');if(cur&&cur.shopUrl){StudioDB.issueProof(cur.shopUrl);render();toast('A fresh code is issued — the old one is retired ✦')}else{go('/verify')}}
