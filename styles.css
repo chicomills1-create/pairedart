@@ -752,10 +752,10 @@ body.light .id-row dt{color:#7A6234}
 /* ============ PAIRED SOUND (v58) ============
    The Trail: genre worlds are hue-keyed scene tiles (aspect-ratio
    locked, label structurally inside the tile — the census law).
-   The track scene gives the painting the largest visual area; the
-   player is pure-audio demo state (progress + time, no video, no
-   visualizer). Transactional surfaces stay saturation-restrained;
-   the mini-player is contained to the viewport at every width. */
+   The track scene gives the painting the largest visual area.
+   v86: there is no player and no floating player — demo tracks carry
+   no audio, so Sound renders no playback controls at all.
+   Transactional surfaces stay saturation-restrained. */
 .sound-worlds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}
 .sound-world{position:relative;display:block;width:100%;aspect-ratio:4/3;border-radius:16px;overflow:hidden;border:1px solid var(--line);padding:0;background:#111316;text-align:left;min-width:0}
 .sound-world img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
@@ -773,11 +773,7 @@ body.light .id-row dt{color:#7A6234}
 .sound-stage{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:16/10;border:1px solid var(--line);margin-bottom:18px}
 .sound-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .sound-stage .tag{position:absolute;left:14px;bottom:14px;z-index:2}
-.sound-player{margin-bottom:18px}
-.sound-prog-wrap{display:flex;align-items:center;gap:12px}
-.sound-prog{flex:1;min-width:0;height:8px;border-radius:99px;background:#2B2733;overflow:hidden}
-.sound-prog i{display:block;height:100%;width:0;background:var(--mh,#39D0C4);border-radius:99px;transition:width .25s linear}
-.sound-time{font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.sound-scene-head{margin-bottom:18px}
 .sound-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:18px;align-items:start}
 .lic-opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .lic-opt{display:flex;flex-direction:column;gap:7px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 16px;color:var(--bone);min-width:0}
@@ -787,25 +783,10 @@ body.light .id-row dt{color:#7A6234}
 .lic-opt.on{border-color:var(--champagne);box-shadow:0 0 0 1px var(--champagne)}
 .buy-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
 .mile-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
-.mini-player{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(680px,calc(100vw - 24px));z-index:80;display:flex;gap:12px;align-items:center;background:#0E1013;border:1px solid var(--champagne);border-radius:14px;padding:10px 12px;box-shadow:0 18px 40px rgba(0,0,0,.55);color:#F4F0E8}
-.mini-thumb{width:46px;height:46px;border-radius:9px;object-fit:cover;flex:none}
-.mini-info{flex:1;min-width:0}
-.mini-info b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
-.mini-info span{font-size:11.5px;color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini-prog{margin-top:6px;background:#2B2733}
-.mini-player .mini-btn{flex:none}
-body.light .mini-player{background:#FFFDF7;color:#241F31;border-color:#BDA579}
-body.light .sound-prog,body.light .mini-prog{background:#E4DCC8}
 @media(max-width:900px){.sound-worlds{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:720px){.lic-opts{grid-template-columns:minmax(0,1fr)}.buy-grid{grid-template-columns:minmax(0,1fr)}.sound-cols{grid-template-columns:minmax(0,1fr)}.sound-stage{aspect-ratio:4/3}.mini-player{bottom:10px;padding:9px 10px}.mini-player .sound-time{display:none}}
+@media(max-width:720px){.lic-opts{grid-template-columns:minmax(0,1fr)}.buy-grid{grid-template-columns:minmax(0,1fr)}.sound-cols{grid-template-columns:minmax(0,1fr)}.sound-stage{aspect-ratio:4/3}}
 /* ============ CENSUS-2 FIXES (v59) ============ */
 .badge-violet{background:#7a3cff;color:#fff}
-body.light .mini-info span{color:#5d5570}
-body.light .mini-scene{color:#8a6d1f}
-body.light .mini-close{color:#5d5570}
-body.has-mini #toast{bottom:96px}
-body.has-mini .install-bar{bottom:calc(96px + env(safe-area-inset-bottom))}
-@media(max-width:380px){.mini-player{gap:8px}.mini-thumb{width:38px;height:38px}.mini-scene{display:none}}
 
 /* ============ PAIRED MARK (2026-10-30) ============ */
 /* The interlock glyph is line art, not a photo: no round crop, no black disc. */
