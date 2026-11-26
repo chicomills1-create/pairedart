@@ -10,7 +10,7 @@ PAIRED is built for the next generation of artists, and for collectors who would
 - The house rule: real art, by real artists, signed by the hand that made it.
 - Human-made only: no AI-generated work is sold here.
 - Open to teenagers and adults: you must be 13 or older to join. PAIRED does not create accounts for children under 13.
-- Current state, stated on the site itself: Memberships are live. Art purchases open artist by artist as listings activate; demo pieces never sell.
+- Current state, stated on the site itself: Memberships are live. Artwork purchases are not yet active; demo pieces never sell.
 
 ## House rules on money
 
@@ -38,7 +38,7 @@ PAIRED is a single-page app: the links below are app routes that open inside htt
 - Explore: https://pairedart.com/#/explore — browse original art by category.
 - Commission Board: https://pairedart.com/#/board — buyers post commission briefs; artists pitch in the thread.
 - Artists: https://pairedart.com/#/artists — the artist directory.
-- Top Sellers: https://pairedart.com/#/top
+- Founding Artists: https://pairedart.com/#/top — a curated introduction to PAIRED's founding artists. No artwork sales have occurred yet; no seller performance data exists.
 - Artist Spotlight: https://pairedart.com/#/spotlight — one artist on the stage each week.
 - Sell: https://pairedart.com/#/sell — open a studio and list a piece.
 - Sell Art Online: https://pairedart.com/#/sell-art-online — for artists: how selling works here, the tiers, and what you keep.
